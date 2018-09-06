@@ -317,6 +317,7 @@ public class TGMap : MonoBehaviour {
 			if (tile.GetTileType() != (int)TILE_TYPE.ENDPOINT)
 				SetTileTexture(tile, tile.GetOldTileType(), tile.GetX(), tile.GetY());
 		}
+		map.ClearPath();
 	}
 
 	public void ClearAlgorithm()
