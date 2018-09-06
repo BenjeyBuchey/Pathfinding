@@ -21,6 +21,8 @@ public class TGMap : MonoBehaviour {
 	private string selectedAlgorithm = string.Empty;
 	private const string bfs = "Breadth First Search", dijkstra = "Dijkstra's", astar = "A*", gbfs = "Greedy Best First Search";
 	public float costGrass = 2.0f, costGround = 1.0f;
+	public bool visualizeAlgorithms;
+	public float visualizeDelay;
 
 	// Use this for initialization
 	void Start () {
@@ -270,7 +272,7 @@ public class TGMap : MonoBehaviour {
 		BreadthFirstSearch algo = new BreadthFirstSearch();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint());
 
-		DrawPath(algo.GetPath());
+		Visualize(algo.GetPath(), algo.GetAlgoTiles());
 	}
 
 	public void StartAlgorithmDijkstra()
@@ -278,7 +280,7 @@ public class TGMap : MonoBehaviour {
 		Dijkstras algo = new Dijkstras();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
 
-		DrawPath(algo.GetPath());
+		Visualize(algo.GetPath(), algo.GetAlgoTiles());
 	}
 
 	public void StartAlgorithmAStar()
@@ -286,7 +288,7 @@ public class TGMap : MonoBehaviour {
 		AStar algo = new AStar();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
 
-		DrawPath(algo.GetPath());
+		Visualize(algo.GetPath(), algo.GetAlgoTiles());
 	}
 
 	public void StartAlgorithmGBFS()
@@ -294,7 +296,48 @@ public class TGMap : MonoBehaviour {
 		GreedyBestFirstSearch algo = new GreedyBestFirstSearch();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
 
-		DrawPath(algo.GetPath());
+		Visualize(algo.GetPath(), algo.GetAlgoTiles());
+	}
+
+	private void Visualize(List<TDTile> path, List<TDTile> algoTiles)
+	{
+		if (visualizeAlgorithms)
+		{
+			VisualizeAlgorithms(algoTiles, path);
+			
+		}
+		else
+			DrawPath(path);
+	}
+
+	private void VisualizeAlgorithms(List<TDTile> algoTiles, List<TDTile> path)
+	{
+		StartCoroutine(DoVisualizeAlgorithms(algoTiles, path));
+	}
+
+	IEnumerator DoVisualizeAlgorithms(List<TDTile> algoTiles, List<TDTile> path)
+	{
+		foreach(TDTile tile in algoTiles)
+		{
+			// set neighbour tiles
+			foreach(TDTile neighbour in tile.neighbours)
+			{
+				if (neighbour == null || neighbour.GetTileType() == (int)TILE_TYPE.WATER || neighbour.GetTileType() == (int)TILE_TYPE.WALL
+					|| neighbour.GetTileType() == (int)TILE_TYPE.STARTPOINT || neighbour.GetTileType() == (int)TILE_TYPE.ENDPOINT) continue;
+
+				if(neighbour.GetTileType() == (int)TILE_TYPE.GRASS || neighbour.GetTileType() == (int)TILE_TYPE.GROUND)
+					neighbour.SetOldTileType(neighbour.GetTileType());
+				SetTileTexture(neighbour, (int)TILE_TYPE.PATH_CURRENT, neighbour.GetX(), neighbour.GetY());
+			}
+
+			// set current tile
+			if(tile != map.GetStartPoint() && tile != map.GetEndPoint())
+				SetTileTexture(tile, (int)TILE_TYPE.PATH_PAST, tile.GetX(), tile.GetY());
+
+			// wait
+			yield return new WaitForSeconds(visualizeDelay);
+		}
+		DrawPath(path);
 	}
 
 	private void DrawPath(List<TDTile> path)
@@ -323,7 +366,31 @@ public class TGMap : MonoBehaviour {
 	public void ClearAlgorithm()
 	{
 		selectedAlgorithm = string.Empty;
-		ClearPath();
+		if (visualizeAlgorithms)
+			ClearPathAll();
+		else
+			ClearPath();
+	}
+
+	private void ClearPathAll()
+	{
+		// TODO: not working
+		TDTile[,] tiles = map.GetTiles();
+		foreach(TDTile tile in tiles)
+		{
+			if (tile.GetTileType() != (int)TILE_TYPE.ENDPOINT)
+				SetTileTexture(tile, tile.GetOldTileType(), tile.GetX(), tile.GetY());
+		}
+
+		//for (int y = 0; y < gridSizeZ; y++)
+		//{
+		//	for (int x = 0; x < gridSizeX; x++)
+		//	{
+		//		if (tiles[y, x].GetTileType() != (int)TILE_TYPE.ENDPOINT)
+		//			SetTileTexture(tiles[y, x], tiles[y, x].GetOldTileType(), tiles[y, x].GetX(), tiles[y, x].GetY());
+		//	}
+		//}
+		map.ClearPath();
 	}
 
 	public float GetCostByTileType(int type)

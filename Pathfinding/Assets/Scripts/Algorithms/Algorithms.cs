@@ -6,6 +6,7 @@ public abstract class Algorithms {
 
 	protected string name;
 	protected List<TDTile> path;
+	protected List<TDTile> algoTiles = new List<TDTile>();
 
 	public abstract void StartAlgorithm(TDTile start, TDTile end, TGMap map);
 
@@ -17,6 +18,11 @@ public abstract class Algorithms {
 	public List<TDTile> GetPath()
 	{
 		return path;
+	}
+
+	public List<TDTile> GetAlgoTiles()
+	{
+		return algoTiles;
 	}
 
 	protected void GeneratePath(TDTile end, Dictionary<TDTile, TDTile> cameFrom)

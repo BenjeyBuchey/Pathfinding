@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TILE_TYPE { GROUND = 0, WATER = 1, GRASS = 2, WALL = 3, STARTPOINT = 4, ENDPOINT = 5, PATH = 6 }
+public enum TILE_TYPE { GROUND = 0, WATER = 1, GRASS = 2, WALL = 3, STARTPOINT = 4, ENDPOINT = 5, PATH = 6, PATH_PAST = 7, PATH_CURRENT = 8 }
 public enum TILE_NEIGHBOUR { NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3}
 
 public class TDTile {

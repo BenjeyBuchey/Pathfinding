@@ -5,8 +5,6 @@ using UnityEngine; //for debugging
 
 public class BreadthFirstSearch : Algorithms
 {
-	//private List<TDTile> path;
-
 	public BreadthFirstSearch()
 	{
 		name = "BreadthFirstSearch";
@@ -14,6 +12,8 @@ public class BreadthFirstSearch : Algorithms
 
 	public override void StartAlgorithm(TDTile start, TDTile end, TGMap map = null)
 	{
+		algoTiles.Clear();
+
 		Queue<TDTile> frontier = new Queue<TDTile>();
 		frontier.Enqueue(start);
 
@@ -26,11 +26,12 @@ public class BreadthFirstSearch : Algorithms
 			if (currentTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 				break;
 
-			foreach(TDTile nextTile in currentTile.neighbours)
+			foreach (TDTile nextTile in currentTile.neighbours)
 			{
 				if (nextTile == null || nextTile.GetTileType() == (int)TILE_TYPE.WATER || nextTile.GetTileType() == (int)TILE_TYPE.WALL) continue;
 
-				if(!cameFrom.ContainsKey(nextTile))
+				algoTiles.Add(nextTile);
+				if (!cameFrom.ContainsKey(nextTile))
 				{
 					frontier.Enqueue(nextTile);
 					cameFrom.Add(nextTile, currentTile);
@@ -41,24 +42,4 @@ public class BreadthFirstSearch : Algorithms
 
 		GeneratePath(end, cameFrom);
 	}
-
-	//private void GeneratePath(TDTile end, Dictionary<TDTile, TDTile> cameFrom)
-	//{
-	//	TDTile currentTile = end;
-	//	path = new List<TDTile>();
-
-	//	while(currentTile.GetTileType() != (int)TILE_TYPE.STARTPOINT)
-	//	{
-	//		path.Add(currentTile);
-	//		//cameFrom.TryGetValue(currentTile, out currentTile);
-	//		currentTile = cameFrom[currentTile];
-	//	}
-
-	//	path.Reverse();
-	//}
-
-	//public List<TDTile> GetPath()
-	//{
-	//	return path;
-	//}
 }
