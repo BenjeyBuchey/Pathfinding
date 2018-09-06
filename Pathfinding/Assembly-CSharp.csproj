@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Algorithms\AStar.cs" />
     <Compile Include="Assets\Scripts\Algorithms\BreadthFirstSearch.cs" />
     <Compile Include="Assets\Scripts\Algorithms\Dijkstras.cs" />
+    <Compile Include="Assets\Scripts\Algorithms\GreedyBestFirstSearch.cs" />
     <Compile Include="Assets\Scripts\PriorityQueue\FastPriorityQueue.cs" />
     <Compile Include="Assets\Scripts\PriorityQueue\FastPriorityQueueNode.cs" />
     <Compile Include="Assets\Scripts\PriorityQueue\GenericPriorityQueue.cs" />

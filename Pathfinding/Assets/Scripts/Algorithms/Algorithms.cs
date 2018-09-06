@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine; // debugging
 
 public abstract class Algorithms {
 
@@ -31,5 +32,12 @@ public abstract class Algorithms {
 		}
 
 		path.Reverse();
+	}
+
+	protected float Heuristic(TDTile a, TDTile b)
+	{
+		float heuristic = System.Math.Abs(a.GetX() - b.GetX()) + System.Math.Abs(a.GetY() - b.GetY());
+		//Debug.Log("HEURISTIC: " + heuristic);
+		return heuristic;
 	}
 }

@@ -19,7 +19,7 @@ public class TGMap : MonoBehaviour {
 	private Vector2 lastTileCoords;
 	private int draggedTileType = -1;
 	private string selectedAlgorithm = string.Empty;
-	private const string bfs = "Breadth First Search", dijkstra = "Dijkstra's", astar = "A*";
+	private const string bfs = "Breadth First Search", dijkstra = "Dijkstra's", astar = "A*", gbfs = "Greedy Best First Search";
 	public float costGrass = 2.0f, costGround = 1.0f;
 
 	// Use this for initialization
@@ -257,6 +257,9 @@ public class TGMap : MonoBehaviour {
 			case astar:
 				StartAlgorithmAStar();
 				break;
+			case gbfs:
+				StartAlgorithmGBFS();
+				break;
 			default:
 				break;
 		}
@@ -281,6 +284,14 @@ public class TGMap : MonoBehaviour {
 	public void StartAlgorithmAStar()
 	{
 		AStar algo = new AStar();
+		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
+
+		DrawPath(algo.GetPath());
+	}
+
+	public void StartAlgorithmGBFS()
+	{
+		GreedyBestFirstSearch algo = new GreedyBestFirstSearch();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
 
 		DrawPath(algo.GetPath());

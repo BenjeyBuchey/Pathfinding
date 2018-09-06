@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour {
 	private string selectedAlgorithm = string.Empty;
 	
 	public Dropdown dropdown;
-	List<string> algorithms = new List<string>() { "Breadth First Search", "Dijkstra's", "A*" };
+	List<string> algorithms = new List<string>() { "Breadth First Search", "Dijkstra's", "Greedy Best First Search", "A*" };
 	public GameObject tileMap;
 
 	private void Start()
