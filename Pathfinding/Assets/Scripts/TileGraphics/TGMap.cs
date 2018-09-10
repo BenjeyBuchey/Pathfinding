@@ -227,7 +227,9 @@ public class TGMap : MonoBehaviour {
 
 	private void SetTileTexture(TDTile tile, int tileType, int x, int z)
 	{
-		tile.SetOldTileType(tile.GetTileType());
+		// we don't need to set old tile type if current type is PATH_PAST or PATH_CURRENT
+		if(tile.GetTileType() != (int)TILE_TYPE.PATH_NEXT && tile.GetTileType() != (int)TILE_TYPE.PATH_CURRENT)
+			tile.SetOldTileType(tile.GetTileType());
 		tile.SetTileType(tileType);
 
 		if (tileType == (int)TILE_TYPE.STARTPOINT)
@@ -241,8 +243,8 @@ public class TGMap : MonoBehaviour {
 
 	public void StartAlgorithm(string algorithm)
 	{
+		ClearAlgorithm();
 		selectedAlgorithm = algorithm;
-		ClearPath();
 		RefreshAlgorithm();
 	}
 
@@ -272,7 +274,7 @@ public class TGMap : MonoBehaviour {
 		BreadthFirstSearch algo = new BreadthFirstSearch();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint());
 
-		Visualize(algo.GetPath(), algo.GetAlgoTiles());
+		Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
 	public void StartAlgorithmDijkstra()
@@ -280,7 +282,7 @@ public class TGMap : MonoBehaviour {
 		Dijkstras algo = new Dijkstras();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
 
-		Visualize(algo.GetPath(), algo.GetAlgoTiles());
+		Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
 	public void StartAlgorithmAStar()
@@ -288,7 +290,7 @@ public class TGMap : MonoBehaviour {
 		AStar algo = new AStar();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
 
-		Visualize(algo.GetPath(), algo.GetAlgoTiles());
+		Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
 	public void StartAlgorithmGBFS()
@@ -296,43 +298,42 @@ public class TGMap : MonoBehaviour {
 		GreedyBestFirstSearch algo = new GreedyBestFirstSearch();
 		algo.StartAlgorithm(map.GetStartPoint(), map.GetEndPoint(), this);
 
-		Visualize(algo.GetPath(), algo.GetAlgoTiles());
+		Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
-	private void Visualize(List<TDTile> path, List<TDTile> algoTiles)
+	private void Visualize(List<TDTile> path, List<AlgorithmStep> algoSteps)
 	{
 		if (visualizeAlgorithms)
 		{
-			VisualizeAlgorithms(algoTiles, path);
+			VisualizeAlgorithms(algoSteps, path);
 			
 		}
 		else
 			DrawPath(path);
 	}
 
-	private void VisualizeAlgorithms(List<TDTile> algoTiles, List<TDTile> path)
+	private void VisualizeAlgorithms(List<AlgorithmStep> algoSteps, List<TDTile> path)
 	{
-		StartCoroutine(DoVisualizeAlgorithms(algoTiles, path));
+		StartCoroutine(DoVisualizeAlgorithms(algoSteps, path));
 	}
 
-	IEnumerator DoVisualizeAlgorithms(List<TDTile> algoTiles, List<TDTile> path)
+	IEnumerator DoVisualizeAlgorithms(List<AlgorithmStep> algoSteps, List<TDTile> path)
 	{
-		foreach(TDTile tile in algoTiles)
+		foreach (AlgorithmStep algoStep in algoSteps)
 		{
-			// set neighbour tiles
-			foreach(TDTile neighbour in tile.neighbours)
-			{
-				if (neighbour == null || neighbour.GetTileType() == (int)TILE_TYPE.WATER || neighbour.GetTileType() == (int)TILE_TYPE.WALL
-					|| neighbour.GetTileType() == (int)TILE_TYPE.STARTPOINT || neighbour.GetTileType() == (int)TILE_TYPE.ENDPOINT) continue;
+			// TODO: PATH_CURRENT_START TILE
+			// PATH_NEXT_START TILE
 
-				if(neighbour.GetTileType() == (int)TILE_TYPE.GRASS || neighbour.GetTileType() == (int)TILE_TYPE.GROUND)
-					neighbour.SetOldTileType(neighbour.GetTileType());
-				SetTileTexture(neighbour, (int)TILE_TYPE.PATH_CURRENT, neighbour.GetX(), neighbour.GetY());
-			}
 
 			// set current tile
-			if(tile != map.GetStartPoint() && tile != map.GetEndPoint())
-				SetTileTexture(tile, (int)TILE_TYPE.PATH_PAST, tile.GetX(), tile.GetY());
+			if (algoStep.CurrentTile != map.GetStartPoint() && algoStep.CurrentTile != map.GetEndPoint())
+				SetTileTexture(algoStep.CurrentTile, (int)TILE_TYPE.PATH_CURRENT, algoStep.CurrentTile.GetX(), algoStep.CurrentTile.GetY());
+
+			foreach (TDTile next in algoStep.NeighbourTiles)
+			{
+				if (next != map.GetStartPoint() && next != map.GetEndPoint())
+					SetTileTexture(next, (int)TILE_TYPE.PATH_NEXT, next.GetX(), next.GetY());
+			}
 
 			// wait
 			yield return new WaitForSeconds(visualizeDelay);
@@ -374,22 +375,18 @@ public class TGMap : MonoBehaviour {
 
 	private void ClearPathAll()
 	{
-		// TODO: not working
+		// we want to clear only tiles with type path, path_past & path_current
 		TDTile[,] tiles = map.GetTiles();
-		foreach(TDTile tile in tiles)
-		{
-			if (tile.GetTileType() != (int)TILE_TYPE.ENDPOINT)
-				SetTileTexture(tile, tile.GetOldTileType(), tile.GetX(), tile.GetY());
-		}
 
-		//for (int y = 0; y < gridSizeZ; y++)
-		//{
-		//	for (int x = 0; x < gridSizeX; x++)
-		//	{
-		//		if (tiles[y, x].GetTileType() != (int)TILE_TYPE.ENDPOINT)
-		//			SetTileTexture(tiles[y, x], tiles[y, x].GetOldTileType(), tiles[y, x].GetX(), tiles[y, x].GetY());
-		//	}
-		//}
+		for (int y = 0; y < gridSizeZ; y++)
+		{
+			for (int x = 0; x < gridSizeX; x++)
+			{
+				if (tiles[y, x].GetTileType() != (int)TILE_TYPE.ENDPOINT && (tiles[y, x].GetTileType() == (int)TILE_TYPE.PATH || tiles[y, x].GetTileType() == (int)TILE_TYPE.PATH_CURRENT ||
+					tiles[y, x].GetTileType() == (int)TILE_TYPE.PATH_NEXT))
+					SetTileTexture(tiles[y, x], tiles[y, x].GetOldTileType(), tiles[y, x].GetX(), tiles[y, x].GetY());
+			}
+		}
 		map.ClearPath();
 	}
 

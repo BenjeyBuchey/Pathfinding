@@ -65,10 +65,10 @@ public class TDMap {
 
 				// set north neighbour of this south & east neighbour of this west
 				if (_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTH] != null)
-					_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTH].neighbours[(int)(int)TILE_NEIGHBOUR.NORTH] = _tiles[y, x];
+					_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTH].neighbours[(int)TILE_NEIGHBOUR.NORTH] = _tiles[y, x];
 
 				if (_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.WEST] != null)
-					_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.WEST].neighbours[(int)(int)TILE_NEIGHBOUR.EAST] = _tiles[y, x];
+					_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.WEST].neighbours[(int)TILE_NEIGHBOUR.EAST] = _tiles[y, x];
 			}
 		}
 	}

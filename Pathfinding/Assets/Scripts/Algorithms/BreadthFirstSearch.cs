@@ -12,7 +12,7 @@ public class BreadthFirstSearch : Algorithms
 
 	public override void StartAlgorithm(TDTile start, TDTile end, TGMap map = null)
 	{
-		algoTiles.Clear();
+		algoSteps.Clear();
 
 		Queue<TDTile> frontier = new Queue<TDTile>();
 		frontier.Enqueue(start);
@@ -26,15 +26,18 @@ public class BreadthFirstSearch : Algorithms
 			if (currentTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 				break;
 
+			AlgorithmStep algoStep = new AlgorithmStep(currentTile);
+			algoSteps.Add(algoStep);
+
 			foreach (TDTile nextTile in currentTile.neighbours)
 			{
-				if (nextTile == null || nextTile.GetTileType() == (int)TILE_TYPE.WATER || nextTile.GetTileType() == (int)TILE_TYPE.WALL) continue;
+				if (nextTile == null || nextTile.GetTileType() == (int)TILE_TYPE.WATER || nextTile.GetTileType() == (int)TILE_TYPE.WALL) continue; // || == START TYLE !?
 
-				algoTiles.Add(nextTile);
 				if (!cameFrom.ContainsKey(nextTile))
 				{
 					frontier.Enqueue(nextTile);
 					cameFrom.Add(nextTile, currentTile);
+					algoStep.NeighbourTiles.Add(nextTile);
 				}
 			}
 

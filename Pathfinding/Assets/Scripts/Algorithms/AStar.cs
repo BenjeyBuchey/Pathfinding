@@ -13,6 +13,8 @@ public class AStar : Algorithms {
 
 	public override void StartAlgorithm(TDTile start, TDTile end, TGMap map)
 	{
+		algoSteps.Clear();
+
 		SimplePriorityQueue<TDTile> frontier = new SimplePriorityQueue<TDTile>();
 		frontier.Enqueue(start, 0);
 
@@ -29,6 +31,9 @@ public class AStar : Algorithms {
 			if (currentTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 				break;
 
+			AlgorithmStep algoStep = new AlgorithmStep(currentTile);
+			algoSteps.Add(algoStep);
+
 			foreach (TDTile nextTile in currentTile.neighbours)
 			{
 				if (nextTile == null || nextTile.GetTileType() == (int)TILE_TYPE.WATER || nextTile.GetTileType() == (int)TILE_TYPE.WALL) continue;
@@ -43,6 +48,7 @@ public class AStar : Algorithms {
 					if (cameFrom.ContainsKey(nextTile)) // TODO: check if this is correct approach (without this we get multiple entries for keys)
 						cameFrom.Remove(nextTile);
 					cameFrom.Add(nextTile, currentTile);
+					algoStep.NeighbourTiles.Add(nextTile);
 				}
 			}
 

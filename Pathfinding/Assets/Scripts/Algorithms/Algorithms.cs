@@ -7,6 +7,7 @@ public abstract class Algorithms {
 	protected string name;
 	protected List<TDTile> path;
 	protected List<TDTile> algoTiles = new List<TDTile>();
+	protected List<AlgorithmStep> algoSteps = new List<AlgorithmStep>();
 
 	public abstract void StartAlgorithm(TDTile start, TDTile end, TGMap map);
 
@@ -23,6 +24,11 @@ public abstract class Algorithms {
 	public List<TDTile> GetAlgoTiles()
 	{
 		return algoTiles;
+	}
+
+	public List<AlgorithmStep> GetAlgoSteps()
+	{
+		return algoSteps;
 	}
 
 	protected void GeneratePath(TDTile end, Dictionary<TDTile, TDTile> cameFrom)
@@ -43,7 +49,6 @@ public abstract class Algorithms {
 	protected float Heuristic(TDTile a, TDTile b)
 	{
 		float heuristic = System.Math.Abs(a.GetX() - b.GetX()) + System.Math.Abs(a.GetY() - b.GetY());
-		//Debug.Log("HEURISTIC: " + heuristic);
 		return heuristic;
 	}
 }
