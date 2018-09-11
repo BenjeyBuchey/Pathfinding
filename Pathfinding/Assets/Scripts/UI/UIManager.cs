@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
-
-	private string selectedAlgorithm = string.Empty;
 	
 	public Dropdown dropdown;
 	List<string> algorithms = new List<string>() { "Breadth First Search", "Dijkstra's", "Greedy Best First Search", "A*" };

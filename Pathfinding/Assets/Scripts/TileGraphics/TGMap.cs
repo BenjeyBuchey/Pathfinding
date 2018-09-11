@@ -21,7 +21,7 @@ public class TGMap : MonoBehaviour {
 	private string selectedAlgorithm = string.Empty;
 	private const string bfs = "Breadth First Search", dijkstra = "Dijkstra's", astar = "A*", gbfs = "Greedy Best First Search";
 	public float costGrass = 2.0f, costGround = 1.0f;
-	public bool visualizeAlgorithms;
+	public bool visualizeAlgorithms, isRunning = false;
 	public float visualizeDelay;
 
 	// Use this for initialization
@@ -35,7 +35,6 @@ public class TGMap : MonoBehaviour {
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			//Debug.Log("MOUSEBUTTON DOWN FIRED!");
 			int x = 0, z = 0;
 			TDTile draggedTile = GetSelectedTile(ref x, ref z);
 			if (draggedTile == null) return;
@@ -43,15 +42,12 @@ public class TGMap : MonoBehaviour {
 			if (draggedTile.GetTileType() == (int)TILE_TYPE.STARTPOINT || draggedTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 				isDragged = true;
 
-			//ClearPath();
-
 			draggedTileType = draggedTile.GetTileType();
 			lastTileCoords = new Vector2(x, z);
 		}
 
 		if (Input.GetMouseButtonUp(0))
 		{
-			//Debug.Log("MOUSEBUTTON UP FIRED!");
 			if (isDragged)
 				RefreshAlgorithm();
 
@@ -71,15 +67,36 @@ public class TGMap : MonoBehaviour {
 			Vector2 currentTileCoords = new Vector2(x, z);
 			if (currentTileCoords != lastTileCoords)
 			{
-				ClearPath();
-
-				SetLastTile(currentTileCoords);
-
-				// set new tile
-				SetTileTexture(selectedTile, newTileType, x, z);
-
-				RefreshAlgorithm();
+				DragDropRefresh(currentTileCoords, selectedTile, newTileType);
 			}
+		}
+	}
+
+	void DragDropRefresh(Vector2 currentTileCoords, TDTile selectedTile, int newTileType)
+	{
+		if(visualizeAlgorithms)
+		{
+			// full visualization
+			ClearPathAll();
+
+			// set last tile
+			SetLastTile(currentTileCoords);
+
+			// set new tile
+			SetTileTexture(selectedTile, newTileType, (int)currentTileCoords.x, (int)currentTileCoords.y);
+		}
+		else
+		{
+			// only path
+			ClearPath();
+
+			// set last tile
+			SetLastTile(currentTileCoords);
+
+			// set new tile
+			SetTileTexture(selectedTile, newTileType, (int)currentTileCoords.x, (int)currentTileCoords.y);
+
+			RefreshAlgorithm();
 		}
 	}
 
@@ -243,8 +260,11 @@ public class TGMap : MonoBehaviour {
 
 	public void StartAlgorithm(string algorithm)
 	{
+		if (isRunning) return;
+
 		ClearAlgorithm();
 		selectedAlgorithm = algorithm;
+		isRunning = true;
 		RefreshAlgorithm();
 	}
 
@@ -304,10 +324,7 @@ public class TGMap : MonoBehaviour {
 	private void Visualize(List<TDTile> path, List<AlgorithmStep> algoSteps)
 	{
 		if (visualizeAlgorithms)
-		{
 			VisualizeAlgorithms(algoSteps, path);
-			
-		}
 		else
 			DrawPath(path);
 	}
@@ -352,6 +369,8 @@ public class TGMap : MonoBehaviour {
 			if (tile.GetTileType() != (int)TILE_TYPE.ENDPOINT)
 				SetTileTexture(tile, (int)TILE_TYPE.PATH, tile.GetX(), tile.GetY());
 		}
+
+		isRunning = false;
 	}
 
 	private void ClearPath()
@@ -366,6 +385,8 @@ public class TGMap : MonoBehaviour {
 
 	public void ClearAlgorithm()
 	{
+		if (isRunning) return;
+
 		selectedAlgorithm = string.Empty;
 		if (visualizeAlgorithms)
 			ClearPathAll();
