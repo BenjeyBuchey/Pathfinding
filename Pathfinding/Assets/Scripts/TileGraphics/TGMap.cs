@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ public class TGMap : MonoBehaviour {
 	private Color[][] tilePixels;
 	private TDMap map;
 	private Texture2D texture;
-	private bool isDragged = false;
+	private bool isDragged = false, isPressed = false;
 	private Vector2 lastTileCoords;
 	private int draggedTileType = -1;
 	private string selectedAlgorithm = string.Empty;
@@ -34,14 +35,47 @@ public class TGMap : MonoBehaviour {
 
 	void Update()
 	{
+		UIManager ui = GameObject.Find("UIManager").GetComponent<UIManager>();
+		int tileType = ui.GetSelectedButtonTile();
+
+		if (tileType < 0)
+			DragDropStartEndTiles();
+		else
+			DrawTiles(tileType);
+	}
+
+	void DrawTiles(int tileType)
+	{
+		if (Input.GetMouseButtonDown(0) || isPressed)
+		{
+			int x = 0, z = 0;
+			TDTile tile = GetSelectedTile(ref x, ref z);
+			if (tile == null) return;
+
+			isPressed = true;
+
+			if (tile.GetTileType() == (int)TILE_TYPE.STARTPOINT || tile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
+				return;
+
+			SetTileTextureSelfMapCreation(tile, tileType, x, z);
+		}
+
+		if (Input.GetMouseButtonUp(0))
+			isPressed = false;
+	}
+
+	void DragDropStartEndTiles()
+	{
 		if (Input.GetMouseButtonDown(0))
 		{
 			int x = 0, z = 0;
 			TDTile draggedTile = GetSelectedTile(ref x, ref z);
 			if (draggedTile == null) return;
+			if (draggedTile.GetTileType() != (int)TILE_TYPE.STARTPOINT && draggedTile.GetTileType() != (int)TILE_TYPE.ENDPOINT)
+				return;
 
-			if (draggedTile.GetTileType() == (int)TILE_TYPE.STARTPOINT || draggedTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
-				isDragged = true;
+			//if (draggedTile.GetTileType() == (int)TILE_TYPE.STARTPOINT || draggedTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
+			isDragged = true;
 
 			draggedTileType = draggedTile.GetTileType();
 			lastTileCoords = new Vector2(x, z);
@@ -55,11 +89,11 @@ public class TGMap : MonoBehaviour {
 			isDragged = false;
 		}
 
-		if(isDragged)
+		if (isDragged)
 		{
 			int x = 0, z = 0;
 			TDTile selectedTile = GetSelectedTile(ref x, ref z);
-			if (selectedTile == null || selectedTile.GetTileType() == (int)TILE_TYPE.WATER || selectedTile.GetTileType() == (int)TILE_TYPE.WALL || 
+			if (selectedTile == null || selectedTile.GetTileType() == (int)TILE_TYPE.WATER || selectedTile.GetTileType() == (int)TILE_TYPE.WALL ||
 				selectedTile.GetTileType() == (int)TILE_TYPE.STARTPOINT || selectedTile.GetTileType() == (int)TILE_TYPE.ENDPOINT) return;
 
 			int newTileType = draggedTileType;
@@ -255,6 +289,17 @@ public class TGMap : MonoBehaviour {
 		else if (tileType == (int)TILE_TYPE.ENDPOINT)
 			map.SetEndPoint(tile);
 
+		texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, tilePixels[tileType]);
+		texture.Apply();
+	}
+
+	private void SetTileTextureSelfMapCreation(TDTile tile, int tileType, int x, int z)
+	{
+		// start & stop tile can not be overwritten
+		if (tile.GetTileType() == (int)TILE_TYPE.STARTPOINT || tile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
+			return;
+
+		tile.SetTileType(tileType);
 		texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, tilePixels[tileType]);
 		texture.Apply();
 	}

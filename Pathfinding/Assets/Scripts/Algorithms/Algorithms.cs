@@ -33,14 +33,17 @@ public abstract class Algorithms {
 
 	protected void GeneratePath(TDTile end, Dictionary<TDTile, TDTile> cameFrom)
 	{
+		if (cameFrom == null || cameFrom.Count == 0) return;
+
 		TDTile currentTile = end;
 		path = new List<TDTile>();
 
 		while (currentTile.GetTileType() != (int)TILE_TYPE.STARTPOINT)
 		{
 			path.Add(currentTile);
-			//cameFrom.TryGetValue(currentTile, out currentTile);
-			currentTile = cameFrom[currentTile];
+			if (!cameFrom.TryGetValue(currentTile, out currentTile))
+				return;
+			//currentTile = cameFrom[currentTile];
 		}
 
 		path.Reverse();
