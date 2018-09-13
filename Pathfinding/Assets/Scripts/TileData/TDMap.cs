@@ -206,4 +206,10 @@ public class TDMap {
 	{
 		return _path;
 	}
+
+	public void SetTiles(TDTile[,] tiles)
+	{
+		if (tiles == null) return;
+		_tiles = (TDTile[,])tiles.Clone();
+	}
 }

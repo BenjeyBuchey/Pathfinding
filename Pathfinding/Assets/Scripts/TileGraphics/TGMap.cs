@@ -25,6 +25,8 @@ public class TGMap : MonoBehaviour {
 	public float costGrass = 2.0f, costGround = 1.0f;
 	public bool visualizeAlgorithms, isRunning = false;
 	public float visualizeDelay;
+	private Texture2D oldTexture = null; // performance testing
+	private TDTile[,] oldTileMap = null; // performance testing
 
 	// Use this for initialization
 	void Start () {
@@ -308,7 +310,13 @@ public class TGMap : MonoBehaviour {
 	{
 		if (isRunning) return;
 
+		
 		ClearAlgorithm();
+
+		oldTileMap = (TDTile[,])map.GetTiles().Clone(); //performance testing; TODO: not working as intended. multiple starts/clears fk up tiles in map
+		oldTexture = new Texture2D(texture.width, texture.height);
+		Graphics.CopyTexture(texture, oldTexture);
+
 		selectedAlgorithm = algorithm;
 		isRunning = true;
 		RefreshAlgorithm();
@@ -434,10 +442,19 @@ public class TGMap : MonoBehaviour {
 		if (isRunning) return;
 
 		selectedAlgorithm = string.Empty;
-		if (visualizeAlgorithms)
-			ClearPathAll();
-		else
-			ClearPath();
+		if(oldTileMap != null && oldTexture != null)
+		{
+			map.SetTiles(oldTileMap);
+			Graphics.CopyTexture(oldTexture, texture);
+			texture.Apply();
+		}
+
+		oldTileMap = null;
+		oldTexture = null;
+		//if (visualizeAlgorithms)
+		//	ClearPathAll();
+		//else
+		//	ClearPath();
 	}
 
 	private void ClearPathAll()
