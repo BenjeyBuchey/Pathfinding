@@ -54,4 +54,13 @@ public abstract class Algorithms {
 		float heuristic = System.Math.Abs(a.GetX() - b.GetX()) + System.Math.Abs(a.GetY() - b.GetY());
 		return heuristic;
 	}
+
+	protected float ComputeVectorCrossProduct(TDTile start, TDTile goal, TDTile current)
+	{
+		float dx1 = current.GetX() - goal.GetX();
+		float dy1 = current.GetY() - goal.GetY();
+		float dx2 = start.GetX() - goal.GetX();
+		float dy2 = start.GetY() - goal.GetY();
+		return System.Math.Abs(dx1 * dy2 - dx2 * dy1)*0.001f;
+	}
 }

@@ -43,7 +43,7 @@ public class AStar : Algorithms {
 				if (!costSoFar.ContainsKey(nextTile) || newCost < costSoFar[nextTile])
 				{
 					costSoFar[nextTile] = newCost;
-					priority = newCost + Heuristic(end, nextTile);
+					priority = newCost + Heuristic(end, nextTile) + ComputeVectorCrossProduct(start, end, nextTile);
 					frontier.Enqueue(nextTile, priority);
 					if (cameFrom.ContainsKey(nextTile)) // TODO: check if this is correct approach (without this we get multiple entries for keys)
 						cameFrom.Remove(nextTile);

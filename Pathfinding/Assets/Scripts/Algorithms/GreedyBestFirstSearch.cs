@@ -39,7 +39,7 @@ public class GreedyBestFirstSearch : Algorithms {
 
 				if (!cameFrom.ContainsKey(nextTile))
 				{
-					priority = Heuristic(end, nextTile);
+					priority = Heuristic(end, nextTile) + ComputeVectorCrossProduct(start, end, nextTile); // TODO: add priority field to TDTile? to debug and or display priority in game
 					frontier.Enqueue(nextTile, priority);
 					cameFrom.Add(nextTile, currentTile);
 					algoStep.NeighbourTiles.Add(nextTile); // WRONG! WE NEED TO LOOK AT THE TILE WITH LOWEST HEURISTIC FIRST
