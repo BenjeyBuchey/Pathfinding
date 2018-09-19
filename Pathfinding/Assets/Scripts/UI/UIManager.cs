@@ -9,28 +9,50 @@ public class UIManager : MonoBehaviour {
 	public Dropdown dropdown;
 	List<string> algorithms = new List<string>() { "Breadth First Search", "Dijkstra's", "Greedy Best First Search", "A*" };
 	public GameObject tileMap;
-	public Sprite buttonWall, buttonWallSelected, buttonGrass, buttonGrassSelected, buttonWater, buttonWaterSelected, buttonGround, buttonGroundSelected;
+	//public Sprite buttonWall, buttonWallSelected, buttonGrass, buttonGrassSelected, buttonWater, buttonWaterSelected, buttonGround, buttonGroundSelected;
 	private bool isButtonWallSelected = false, isButtonGrassSelected = false, isButtonGroundSelected = false, isButtonWaterSelected = false;
+	private Sprite[] sprites;
+	enum sprite_types { wall = 0, wall_selected, grass, grass_selected, ground, ground_selected, water, water_selected }
 
 	private void Start()
 	{
+		InitTiles();
 		PopulateList();
 		SetTilesButtons();
 	}
 
+	private void InitTiles()
+	{
+		sprites = new Sprite[8];
+		sprites[(int)sprite_types.wall] = Resources.Load<Sprite>("button_wall");
+		sprites[(int)sprite_types.wall_selected] = Resources.Load<Sprite>("button_wall_selected");
+		sprites[(int)sprite_types.grass] = Resources.Load<Sprite>("button_grass");
+		sprites[(int)sprite_types.grass_selected] = Resources.Load<Sprite>("button_grass_selected");
+		sprites[(int)sprite_types.ground] = Resources.Load<Sprite>("button_ground");
+		sprites[(int)sprite_types.ground_selected] = Resources.Load<Sprite>("button_ground_selected");
+		sprites[(int)sprite_types.water] = Resources.Load<Sprite>("button_water");
+		sprites[(int)sprite_types.water_selected] = Resources.Load<Sprite>("button_water_selected");
+	}
+
 	private void SetTilesButtons()
 	{
-		Image img = GameObject.Find("ButtonWall").GetComponent<Image>();
-		img.sprite = buttonWall;
+		GameObject.Find("ButtonWall").GetComponent<Image>().sprite = sprites[(int)sprite_types.wall];
+		GameObject.Find("ButtonGrass").GetComponent<Image>().sprite = sprites[(int)sprite_types.grass];
+		GameObject.Find("ButtonGround").GetComponent<Image>().sprite = sprites[(int)sprite_types.ground];
+		GameObject.Find("ButtonWater").GetComponent<Image>().sprite = sprites[(int)sprite_types.water];
 
-		img = GameObject.Find("ButtonGrass").GetComponent<Image>();
-		img.sprite = buttonGrass;
 
-		img = GameObject.Find("ButtonGround").GetComponent<Image>();
-		img.sprite = buttonGround;
+		//Image img = GameObject.Find("ButtonWall").GetComponent<Image>();
+		//img.sprite = buttonWall;
 
-		img = GameObject.Find("ButtonWater").GetComponent<Image>();
-		img.sprite = buttonWater;
+		//img = GameObject.Find("ButtonGrass").GetComponent<Image>();
+		//img.sprite = buttonGrass;
+
+		//img = GameObject.Find("ButtonGround").GetComponent<Image>();
+		//img.sprite = buttonGround;
+
+		//img = GameObject.Find("ButtonWater").GetComponent<Image>();
+		//img.sprite = buttonWater;
 	}
 
 	public void StartAlgorithm()
@@ -51,10 +73,10 @@ public class UIManager : MonoBehaviour {
 		if (!isButtonWallSelected)
 		{
 			DeselectTileButtons();
-			TileButtonClicked(s, buttonWallSelected);
+			TileButtonClicked(s, (int)sprite_types.wall_selected);
 		}
 		else
-			TileButtonClicked(s, buttonWall);
+			TileButtonClicked(s, (int)sprite_types.wall);
 
 		isButtonWallSelected = !isButtonWallSelected;
 	}
@@ -65,10 +87,10 @@ public class UIManager : MonoBehaviour {
 		if (!isButtonGrassSelected)
 		{
 			DeselectTileButtons();
-			TileButtonClicked(s, buttonGrassSelected);
+			TileButtonClicked(s, (int)sprite_types.grass_selected);
 		}
 		else
-			TileButtonClicked(s, buttonGrass);
+			TileButtonClicked(s, (int)sprite_types.grass);
 
 		isButtonGrassSelected = !isButtonGrassSelected;
 	}
@@ -79,10 +101,10 @@ public class UIManager : MonoBehaviour {
 		if (!isButtonGroundSelected)
 		{
 			DeselectTileButtons();
-			TileButtonClicked(s, buttonGroundSelected);
+			TileButtonClicked(s, (int)sprite_types.ground_selected);
 		}
 		else
-			TileButtonClicked(s, buttonGround);
+			TileButtonClicked(s, (int)sprite_types.ground);
 
 		isButtonGroundSelected = !isButtonGroundSelected;
 	}
@@ -93,33 +115,40 @@ public class UIManager : MonoBehaviour {
 		if (!isButtonWaterSelected)
 		{
 			DeselectTileButtons();
-			TileButtonClicked(s, buttonWaterSelected);
+			TileButtonClicked(s, (int)sprite_types.water_selected);
 		}
 		else
-			TileButtonClicked(s, buttonWater);
+			TileButtonClicked(s, (int)sprite_types.water);
 
 		isButtonWaterSelected = !isButtonWaterSelected;
 	}
 
-	private void TileButtonClicked(string btn, Sprite s)
+	private void TileButtonClicked(string btn, int type)
 	{
-		Image img = GameObject.Find(btn).GetComponent<Image>();
-		img.sprite = s;
+		GameObject.Find(btn).GetComponent<Image>().sprite = sprites[type];
 	}
+
+	//private void TileButtonClicked(string btn, Sprite s)
+	//{
+	//	Image img = GameObject.Find(btn).GetComponent<Image>();
+	//	img.sprite = s;
+	//}
 
 	private void DeselectTileButtons()
 	{
-		Image img = GameObject.Find("ButtonWall").GetComponent<Image>();
-		img.sprite = buttonWall;
+		//Image img = GameObject.Find("ButtonWall").GetComponent<Image>();
+		//img.sprite = buttonWall;
 
-		img = GameObject.Find("ButtonGrass").GetComponent<Image>();
-		img.sprite = buttonGrass;
+		//img = GameObject.Find("ButtonGrass").GetComponent<Image>();
+		//img.sprite = buttonGrass;
 
-		img = GameObject.Find("ButtonWater").GetComponent<Image>();
-		img.sprite = buttonWater;
+		//img = GameObject.Find("ButtonWater").GetComponent<Image>();
+		//img.sprite = buttonWater;
 
-		img = GameObject.Find("ButtonGround").GetComponent<Image>();
-		img.sprite = buttonGround;
+		//img = GameObject.Find("ButtonGround").GetComponent<Image>();
+		//img.sprite = buttonGround;
+
+		SetTilesButtons();
 
 		isButtonGrassSelected = false;
 		isButtonGroundSelected = false;

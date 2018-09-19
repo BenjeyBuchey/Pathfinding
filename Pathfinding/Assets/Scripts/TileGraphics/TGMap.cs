@@ -54,16 +54,26 @@ public class TGMap : MonoBehaviour {
 			TDTile tile = GetSelectedTile(ref x, ref z);
 			if (tile == null) return;
 
+			if (!isPressed)
+			{
+				ClearMap(); // CLearMap() + RefreshMap() leads to bugging out button tiles. they get black. RefreshMap() seems to be the problem TODO !!!
+				
+			}
 			isPressed = true;
 
 			if (tile.GetTileType() == (int)TILE_TYPE.STARTPOINT || tile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 				return;
 
 			SetTileTextureSelfMapCreation(tile, tileType, x, z);
+			//RefreshMap();
 		}
 
 		if (Input.GetMouseButtonUp(0))
+		{
 			isPressed = false;
+
+			RefreshAlgorithm();
+		}
 	}
 
 	void DragDropStartEndTiles()
@@ -76,7 +86,6 @@ public class TGMap : MonoBehaviour {
 			if (draggedTile.GetTileType() != (int)TILE_TYPE.STARTPOINT && draggedTile.GetTileType() != (int)TILE_TYPE.ENDPOINT)
 				return;
 
-			//if (draggedTile.GetTileType() == (int)TILE_TYPE.STARTPOINT || draggedTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 			isDragged = true;
 
 			draggedTileType = draggedTile.GetTileType();
@@ -114,18 +123,25 @@ public class TGMap : MonoBehaviour {
 		if(visualizeAlgorithms)
 		{
 			// full visualization
-			ClearPathAll();
-
+			// we clear map but don't draw new visualization yet. we do that after mouse gets released
+			//ClearPathAll();
+			ClearMap();
+			
 			// set last tile
 			SetLastTile(currentTileCoords);
 
 			// set new tile
 			SetTileTexture(selectedTile, newTileType, (int)currentTileCoords.x, (int)currentTileCoords.y);
+
+			// set current map
+			RefreshMap();
 		}
 		else
 		{
 			// only path
-			ClearPath();
+			// clear map, draw new path
+			//ClearPath();
+			ClearMap();
 
 			// set last tile
 			SetLastTile(currentTileCoords);
@@ -133,6 +149,8 @@ public class TGMap : MonoBehaviour {
 			// set new tile
 			SetTileTexture(selectedTile, newTileType, (int)currentTileCoords.x, (int)currentTileCoords.y);
 
+			// refresh map and draw new path
+			RefreshMap();
 			RefreshAlgorithm();
 		}
 	}
@@ -310,12 +328,10 @@ public class TGMap : MonoBehaviour {
 	{
 		if (isRunning) return;
 
-		
+		//performance testing; TODO: not working as intended. multiple starts/clears fk up tiles in map
 		ClearAlgorithm();
 
-		oldTileMap = (TDTile[,])map.GetTiles().Clone(); //performance testing; TODO: not working as intended. multiple starts/clears fk up tiles in map
-		oldTexture = new Texture2D(texture.width, texture.height);
-		Graphics.CopyTexture(texture, oldTexture);
+		RefreshMap(); 
 
 		selectedAlgorithm = algorithm;
 		isRunning = true;
@@ -442,7 +458,12 @@ public class TGMap : MonoBehaviour {
 		if (isRunning) return;
 
 		selectedAlgorithm = string.Empty;
-		if(oldTileMap != null && oldTexture != null)
+		ClearMap();
+	}
+
+	private void ClearMap()
+	{
+		if (oldTileMap != null && oldTexture != null)
 		{
 			map.SetTiles(oldTileMap);
 			Graphics.CopyTexture(oldTexture, texture);
@@ -451,10 +472,6 @@ public class TGMap : MonoBehaviour {
 
 		oldTileMap = null;
 		oldTexture = null;
-		//if (visualizeAlgorithms)
-		//	ClearPathAll();
-		//else
-		//	ClearPath();
 	}
 
 	private void ClearPathAll()
@@ -485,5 +502,12 @@ public class TGMap : MonoBehaviour {
 			default:
 				return 1.0f;
 		}
+	}
+
+	private void RefreshMap()
+	{
+		oldTileMap = (TDTile[,])map.GetTiles().Clone();
+		oldTexture = new Texture2D(texture.width, texture.height);
+		Graphics.CopyTexture(texture, oldTexture);
 	}
 }
