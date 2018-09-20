@@ -68,9 +68,10 @@ public class TGMap : MonoBehaviour {
 
 		if (Input.GetMouseButtonUp(0))
 		{
-			isPressed = false;
+			if(isPressed)
+				RefreshAlgorithm();
 
-			RefreshAlgorithm(); // TODO: when there is a visualization drawn and we click on a buttonTile it gets refreshed. shouldn't be the case when just a buttonTile is selected
+			isPressed = false;
 		}
 	}
 
