@@ -113,4 +113,28 @@ public class TDTile {
 	{
 		return _y;
 	}
+
+	public void printTileType()
+	{
+		string strTileType = string.Empty;
+		switch(this.type)
+		{
+			case (int)TILE_TYPE.GRASS:
+				strTileType = "GRASS";
+				break;
+			case (int)TILE_TYPE.WALL:
+				strTileType = "WALL";
+				break;
+			case (int)TILE_TYPE.WATER:
+				strTileType = "WATER";
+				break;
+			case (int)TILE_TYPE.GROUND:
+				strTileType = "GROUND";
+				break;
+			default:
+				strTileType = "OTHER";
+				break;
+		}
+		Debug.Log("TILE TYPE: " + strTileType);
+	}
 }

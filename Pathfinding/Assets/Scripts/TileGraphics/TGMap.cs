@@ -508,4 +508,5 @@ public class TGMap : MonoBehaviour {
 	}
 
 	// TODO: A*, GBFS: multiple starts/clears gives wrong results. visualization wrong. through grass !!
+	// seems like movement cost gets ignored on second start
 }
