@@ -55,24 +55,22 @@ public class TGMap : MonoBehaviour {
 			if (tile == null) return;
 
 			if (!isPressed)
-			{
-				ClearMap(); // CLearMap() + RefreshMap() leads to bugging out button tiles. they get black. RefreshMap() seems to be the problem TODO !!!
-				
-			}
+				ClearMap();
+
 			isPressed = true;
 
 			if (tile.GetTileType() == (int)TILE_TYPE.STARTPOINT || tile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 				return;
 
 			SetTileTextureSelfMapCreation(tile, tileType, x, z);
-			//RefreshMap();
+			RefreshMap();
 		}
 
 		if (Input.GetMouseButtonUp(0))
 		{
 			isPressed = false;
 
-			RefreshAlgorithm();
+			RefreshAlgorithm(); // TODO: when there is a visualization drawn and we click on a buttonTile it gets refreshed. shouldn't be the case when just a buttonTile is selected
 		}
 	}
 
@@ -124,7 +122,6 @@ public class TGMap : MonoBehaviour {
 		{
 			// full visualization
 			// we clear map but don't draw new visualization yet. we do that after mouse gets released
-			//ClearPathAll();
 			ClearMap();
 			
 			// set last tile
@@ -140,7 +137,6 @@ public class TGMap : MonoBehaviour {
 		{
 			// only path
 			// clear map, draw new path
-			//ClearPath();
 			ClearMap();
 
 			// set last tile
@@ -177,8 +173,9 @@ public class TGMap : MonoBehaviour {
 		int texWidth = gridSizeX * tileResolution;
 		int texHeight = gridSizeZ * tileResolution;
 		texture = new Texture2D(texWidth, texHeight);
+		oldTexture = new Texture2D(texWidth, texHeight);
 
-		for(int y=0;y<gridSizeZ;y++)
+		for (int y=0;y<gridSizeZ;y++)
 		{
 			for(int x=0;x<gridSizeX;x++)
 			{
@@ -328,7 +325,6 @@ public class TGMap : MonoBehaviour {
 	{
 		if (isRunning) return;
 
-		//performance testing; TODO: not working as intended. multiple starts/clears fk up tiles in map
 		ClearAlgorithm();
 
 		RefreshMap(); 
@@ -467,11 +463,11 @@ public class TGMap : MonoBehaviour {
 		{
 			map.SetTiles(oldTileMap);
 			Graphics.CopyTexture(oldTexture, texture);
-			texture.Apply();
+			//texture.Apply();
 		}
 
 		oldTileMap = null;
-		oldTexture = null;
+		//oldTexture = null;
 	}
 
 	private void ClearPathAll()
@@ -507,7 +503,8 @@ public class TGMap : MonoBehaviour {
 	private void RefreshMap()
 	{
 		oldTileMap = (TDTile[,])map.GetTiles().Clone();
-		oldTexture = new Texture2D(texture.width, texture.height);
 		Graphics.CopyTexture(texture, oldTexture);
 	}
+
+	// TODO: A*, GBFS: multiple starts/clears gives wrong results. visualization wrong. through grass !!
 }
