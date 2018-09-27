@@ -27,6 +27,7 @@ public class TGMap : MonoBehaviour {
 	public float visualizeDelay;
 	private Texture2D oldTexture = null; // performance testing
 	private TDTile[,] oldTileMap = null; // performance testing
+	private bool isTileMapRefreshed = false;
 
 	// Use this for initialization
 	void Start () {
@@ -460,15 +461,20 @@ public class TGMap : MonoBehaviour {
 
 	private void ClearMap()
 	{
-		if (oldTileMap != null && oldTexture != null)
-		{
-			map.SetTiles(oldTileMap);
-			Graphics.CopyTexture(oldTexture, texture);
-			//texture.Apply();
-		}
+		//if (oldTileMap != null && oldTexture != null)
+		//{
+		//	map.SetTiles(oldTileMap);
+		//	Graphics.CopyTexture(oldTexture, texture);
+		//}
 
-		oldTileMap = null;
-		//oldTexture = null;
+		//oldTileMap = null;
+
+		if(isTileMapRefreshed && oldTexture != null)
+		{
+			map.ResetTiles();
+			Graphics.CopyTexture(oldTexture, texture);
+		}
+		isTileMapRefreshed = false;
 	}
 
 	private void ClearPathAll()
@@ -503,10 +509,8 @@ public class TGMap : MonoBehaviour {
 
 	private void RefreshMap()
 	{
-		oldTileMap = (TDTile[,])map.GetTiles().Clone();
+		isTileMapRefreshed = true;
+		//oldTileMap = (TDTile[,])map.GetTiles().Clone();
 		Graphics.CopyTexture(texture, oldTexture);
 	}
-
-	// TODO: A*, GBFS: multiple starts/clears gives wrong results. visualization wrong. through grass !!
-	// seems like movement cost gets ignored on second start
 }

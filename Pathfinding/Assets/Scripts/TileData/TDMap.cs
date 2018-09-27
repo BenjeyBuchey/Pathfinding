@@ -212,4 +212,19 @@ public class TDMap {
 		if (tiles == null) return;
 		_tiles = (TDTile[,])tiles.Clone();
 	}
+
+	public void ResetTiles()
+	{
+		// we want to clear only tiles with type path, path_past & path_current
+		for (int y = 0; y < _height; y++)
+		{
+			for (int x = 0; x < _width; x++)
+			{
+				if (_tiles[y, x].GetTileType() != (int)TILE_TYPE.ENDPOINT && (_tiles[y, x].GetTileType() == (int)TILE_TYPE.PATH || _tiles[y, x].GetTileType() == (int)TILE_TYPE.PATH_CURRENT ||
+					_tiles[y, x].GetTileType() == (int)TILE_TYPE.PATH_NEXT) && _tiles[y, x].GetOldTileType() >= 0)
+					_tiles[y, x].SetTileType(_tiles[y, x].GetOldTileType());
+			}
+		}
+		ClearPath();
+	}
 }
