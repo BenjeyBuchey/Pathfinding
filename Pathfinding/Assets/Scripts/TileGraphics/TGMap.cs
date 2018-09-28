@@ -9,11 +9,10 @@ public class TGMap : MonoBehaviour {
 
 	// grid settings
 	public float tileSize = 1.0f;
-	public Vector3 gridOffset;
 	public int gridSizeX = 10, gridSizeZ = 10;
 	
 	public Texture2D terrainTiles;
-	public int tileResolution = 16;
+	private int tileResolution = 16;
 	private Color[][] tilePixels;
 	private TDMap map;
 	private Texture2D texture;
@@ -23,10 +22,10 @@ public class TGMap : MonoBehaviour {
 	private string selectedAlgorithm = string.Empty;
 	private const string bfs = "Breadth First Search", dijkstra = "Dijkstra's", astar = "A*", gbfs = "Greedy Best First Search";
 	public float costGrass = 2.0f, costGround = 1.0f;
-	public bool visualizeAlgorithms, isRunning = false;
-	public float visualizeDelay;
-	private Texture2D oldTexture = null; // performance testing
-	private TDTile[,] oldTileMap = null; // performance testing
+	public bool visualizeAlgorithms, computeVectorCrossProduct = true;
+	private bool isRunning = false;
+	public float visualizationDelay;
+	private Texture2D oldTexture = null;
 	private bool isTileMapRefreshed = false;
 
 	// Use this for initialization
@@ -421,7 +420,7 @@ public class TGMap : MonoBehaviour {
 			}
 
 			// wait
-			yield return new WaitForSeconds(visualizeDelay);
+			yield return new WaitForSeconds(visualizationDelay);
 		}
 		DrawPath(path);
 	}

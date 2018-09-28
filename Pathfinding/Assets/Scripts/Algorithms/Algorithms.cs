@@ -43,7 +43,6 @@ public abstract class Algorithms {
 			path.Add(currentTile);
 			if (!cameFrom.TryGetValue(currentTile, out currentTile))
 				return;
-			//currentTile = cameFrom[currentTile];
 		}
 
 		path.Reverse();
@@ -57,6 +56,9 @@ public abstract class Algorithms {
 
 	protected float ComputeVectorCrossProduct(TDTile start, TDTile goal, TDTile current)
 	{
+		TGMap tgm = GameObject.Find("TileMap").GetComponent<TGMap>();
+		if (tgm == null || !tgm.computeVectorCrossProduct) return 0.0f;
+
 		float dx1 = current.GetX() - goal.GetX();
 		float dy1 = current.GetY() - goal.GetY();
 		float dx2 = start.GetX() - goal.GetX();

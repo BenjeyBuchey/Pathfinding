@@ -42,7 +42,6 @@ public class AStar : Algorithms {
 
 				if (!costSoFar.ContainsKey(nextTile) || newCost < costSoFar[nextTile])
 				{
-					nextTile.printTileType(); // DEBUGGING MOVEMENT COST BUG
 					costSoFar[nextTile] = newCost;
 					priority = newCost + Heuristic(end, nextTile) + ComputeVectorCrossProduct(start, end, nextTile);
 					frontier.Enqueue(nextTile, priority);

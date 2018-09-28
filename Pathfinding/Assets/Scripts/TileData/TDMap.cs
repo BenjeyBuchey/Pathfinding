@@ -22,7 +22,7 @@ public class TDMap {
 		_tiles = new TDTile[_height, _width];
 		_path = new List<TDTile>();
 		InitTiles();
-		BuildArea();
+		//BuildArea(); we start with full ground map
 		MakePoints();
 	}
 
