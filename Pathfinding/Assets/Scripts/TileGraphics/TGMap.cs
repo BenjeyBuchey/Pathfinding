@@ -37,6 +37,8 @@ public class TGMap : MonoBehaviour {
 
 	void Update()
 	{
+		if (isRunning) return;
+
 		UIManager ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 		int tileType = ui.GetSelectedButtonTile();
 
@@ -331,7 +333,7 @@ public class TGMap : MonoBehaviour {
 		RefreshMap(); 
 
 		selectedAlgorithm = algorithm;
-		isRunning = true;
+		//isRunning = true;
 		RefreshAlgorithm();
 	}
 
@@ -390,10 +392,14 @@ public class TGMap : MonoBehaviour {
 
 	private void Visualize(List<TDTile> path, List<AlgorithmStep> algoSteps)
 	{
+		isRunning = true;
+
 		if (visualizeAlgorithms)
 			VisualizeAlgorithms(algoSteps, path);
 		else
 			DrawPath(path);
+
+		//isRunning = false;
 	}
 
 	private void VisualizeAlgorithms(List<AlgorithmStep> algoSteps, List<TDTile> path)
