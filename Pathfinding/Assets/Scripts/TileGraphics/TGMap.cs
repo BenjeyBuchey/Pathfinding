@@ -466,15 +466,7 @@ public class TGMap : MonoBehaviour {
 
 	private void ClearMap()
 	{
-		//if (oldTileMap != null && oldTexture != null)
-		//{
-		//	map.SetTiles(oldTileMap);
-		//	Graphics.CopyTexture(oldTexture, texture);
-		//}
-
-		//oldTileMap = null;
-
-		if(isTileMapRefreshed && oldTexture != null)
+		if (isTileMapRefreshed && oldTexture != null)
 		{
 			map.ResetTiles();
 			Graphics.CopyTexture(oldTexture, texture);
