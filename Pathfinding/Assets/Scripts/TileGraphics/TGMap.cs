@@ -470,6 +470,7 @@ public class TGMap : MonoBehaviour {
 		{
 			map.ResetTiles();
 			Graphics.CopyTexture(oldTexture, texture);
+			texture.Apply();
 		}
 		isTileMapRefreshed = false;
 	}

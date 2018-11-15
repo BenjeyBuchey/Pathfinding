@@ -25,6 +25,7 @@ public class GreedyBestFirstSearch : Algorithms {
 		while (frontier.Count > 0)
 		{
 			TDTile currentTile = frontier.Dequeue();
+			Debug.Log("Dequeue Tile: " + currentTile.GetHashCode());
 			if (currentTile.GetTileType() == (int)TILE_TYPE.ENDPOINT)
 				break;
 
@@ -41,6 +42,7 @@ public class GreedyBestFirstSearch : Algorithms {
 				{
 					priority = Heuristic(end, nextTile) + ComputeVectorCrossProduct(start, end, nextTile); // TODO: add priority field to TDTile? to debug and or display priority in game
 					frontier.Enqueue(nextTile, priority);
+					Debug.Log("Enqueue Tile: " + nextTile.GetHashCode() + " - priority: " + priority);
 					cameFrom.Add(nextTile, currentTile);
 					algoStep.NeighbourTiles.Add(nextTile); // WRONG! WE NEED TO LOOK AT THE TILE WITH LOWEST HEURISTIC FIRST
 				}
