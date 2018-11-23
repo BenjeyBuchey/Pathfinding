@@ -168,3 +168,6 @@ C:\Users\User\Documents\GitHub\Pathfinding\Pathfinding\obj\Debug\Assembly-CSharp
 C:\Users\User\Documents\GitHub\Pathfinding\Pathfinding\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\User\Documents\GitHub\Pathfinding\Pathfinding\obj\Debug\Assembly-CSharp.dll
 C:\Users\User\Documents\GitHub\Pathfinding\Pathfinding\obj\Debug\Assembly-CSharp.pdb
+C:\Users\User\Documents\GitHub\Pathfinding\Pathfinding\Temp\bin\Debug\UnityEngine.SpatialTrackingModule.dll
+C:\Users\User\Documents\GitHub\Pathfinding\Pathfinding\Temp\bin\Debug\UnityEngine.WebGLModule.dll
+C:\Users\User\Documents\GitHub\Pathfinding\Pathfinding\Temp\bin\Debug\UnityEngine.SpatialTrackingModule.xml

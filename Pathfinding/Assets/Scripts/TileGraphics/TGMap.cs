@@ -28,10 +28,17 @@ public class TGMap : MonoBehaviour {
 	private Texture2D oldTexture = null;
 	private bool isTileMapRefreshed = false;
 
+	private int numTilesTypes = 9;
+	public Sprite spriteGround, spriteGrass, spriteWall, spriteWater, spriteStart, spriteEnd, spritePath, spritePathCurrent, spritePathNext;
+	public Color[][] spriteArray;
+
 	// Use this for initialization
 	void Start () {
 		BuildMesh();
 		BuildTilePixels();
+
+		BuildSpriteArrays();
+
 		BuildTexture();
 	}
 
@@ -46,6 +53,22 @@ public class TGMap : MonoBehaviour {
 			DragDropStartEndTiles();
 		else
 			DrawTiles(tileType);
+	}
+
+	private void BuildSpriteArrays()
+	{
+		spriteArray = new Color[numTilesTypes][];
+
+		
+		spriteArray[(int)TILE_TYPE.GROUND] = spriteGround.texture.GetPixels((int)spriteGround.textureRect.x, (int)spriteGround.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.GRASS] = spriteGrass.texture.GetPixels((int)spriteGrass.textureRect.x, (int)spriteGrass.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.WATER] = spriteWater.texture.GetPixels((int)spriteWater.textureRect.x, (int)spriteWater.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.WALL] = spriteWall.texture.GetPixels((int)spriteWall.textureRect.x, (int)spriteWall.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.STARTPOINT] = spriteStart.texture.GetPixels((int)spriteStart.textureRect.x, (int)spriteStart.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.ENDPOINT] = spriteEnd.texture.GetPixels((int)spriteEnd.textureRect.x, (int)spriteEnd.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.PATH] = spritePath.texture.GetPixels((int)spritePath.textureRect.x, (int)spritePath.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.PATH_CURRENT] = spritePathCurrent.texture.GetPixels((int)spritePathCurrent.textureRect.x, (int)spritePathCurrent.textureRect.y, tileResolution, tileResolution);
+		spriteArray[(int)TILE_TYPE.PATH_NEXT] = spritePathNext.texture.GetPixels((int)spritePathNext.textureRect.x, (int)spritePathNext.textureRect.y, tileResolution, tileResolution);
 	}
 
 	void DrawTiles(int tileType)
@@ -185,7 +208,8 @@ public class TGMap : MonoBehaviour {
 				TDTile tile = map.GetTile(x, y);
 				if (tile == null) continue;
 
-				texture.SetPixels(x * tileResolution, y * tileResolution, tileResolution, tileResolution, tilePixels[tile.GetTileType()]);
+				//texture.SetPixels(x * tileResolution, y * tileResolution, tileResolution, tileResolution, tilePixels[tile.GetTileType()]);
+				texture.SetPixels(x * tileResolution, y * tileResolution, tileResolution, tileResolution, spriteArray[tile.GetTileType()]);
 			}
 		}
 
@@ -309,7 +333,8 @@ public class TGMap : MonoBehaviour {
 		else if (tileType == (int)TILE_TYPE.ENDPOINT)
 			map.SetEndPoint(tile);
 
-		texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, tilePixels[tileType]);
+		texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, spriteArray[tileType]);
+		//texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, tilePixels[tileType]);
 		texture.Apply();
 	}
 
@@ -320,7 +345,11 @@ public class TGMap : MonoBehaviour {
 			return;
 
 		tile.SetTileType(tileType);
-		texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, tilePixels[tileType]);
+
+		texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, spriteArray[tileType]);
+		if (spriteArray[tileType].Equals(tilePixels[tileType]))
+			Debug.Log("YOYOYO");
+		//texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, tilePixels[tileType]);
 		texture.Apply();
 	}
 
