@@ -33,6 +33,9 @@ public class BreadthFirstSearch : Algorithms
 			{
 				if (nextTile == null || nextTile.GetTileType() == (int)TILE_TYPE.WATER || nextTile.GetTileType() == (int)TILE_TYPE.WALL) continue; // || == START TYLE !?
 
+				// diagonal step check: if neighbour is diagonal but diagonal step not allowed --> we skip
+				if (IsDiagonalNeighbour(currentTile, nextTile) && !IsDiagonalStepAllowed()) continue;
+
 				if (!cameFrom.ContainsKey(nextTile))
 				{
 					frontier.Enqueue(nextTile);

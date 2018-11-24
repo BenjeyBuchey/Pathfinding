@@ -22,7 +22,7 @@ public class TGMap : MonoBehaviour {
 	private string selectedAlgorithm = string.Empty;
 	private const string bfs = "Breadth First Search", dijkstra = "Dijkstra's", astar = "A*", gbfs = "Greedy Best First Search";
 	public float costGrass = 2.0f, costGround = 1.0f;
-	public bool visualizeAlgorithms, computeVectorCrossProduct = true;
+	public bool visualizeAlgorithms, computeVectorCrossProduct = true, allowDiagonalStep = false;
 	private bool isRunning = false;
 	public float visualizationDelay;
 	private Texture2D oldTexture = null;

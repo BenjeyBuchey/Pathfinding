@@ -62,6 +62,8 @@ public class TDMap {
 				// set neighbors
 				_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTH] = (y <= 0) ? null :  _tiles[y - 1, x];
 				_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.WEST] = (x <= 0) ? null : _tiles[y, x - 1];
+				_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTHWEST] = (x <= 0 || y <= 0) ? null : _tiles[y - 1, x - 1];
+				// TODO OTHER DIAGONAL
 
 				// set north neighbour of this south & east neighbour of this west
 				if (_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTH] != null)
@@ -69,6 +71,9 @@ public class TDMap {
 
 				if (_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.WEST] != null)
 					_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.WEST].neighbours[(int)TILE_NEIGHBOUR.EAST] = _tiles[y, x];
+
+				if (_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTHWEST] != null)
+					_tiles[y, x].neighbours[(int)TILE_NEIGHBOUR.SOUTHWEST].neighbours[(int)TILE_NEIGHBOUR.NORTHEAST] = _tiles[y, x];
 			}
 		}
 	}

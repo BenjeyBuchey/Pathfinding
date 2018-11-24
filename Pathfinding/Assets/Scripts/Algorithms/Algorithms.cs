@@ -65,4 +65,25 @@ public abstract class Algorithms {
 		float dy2 = start.GetY() - goal.GetY();
 		return System.Math.Abs(dx1 * dy2 - dx2 * dy1)*0.001f;
 	}
+
+	protected bool IsDiagonalNeighbour(TDTile current, TDTile neighbour)
+	{
+		if (current == null || neighbour == null) return false;
+
+		if (current.neighbours[(int)TILE_NEIGHBOUR.NORTHEAST] == neighbour ||
+			current.neighbours[(int)TILE_NEIGHBOUR.NORTHWEST] == neighbour ||
+			current.neighbours[(int)TILE_NEIGHBOUR.SOUTHEAST] == neighbour ||
+			current.neighbours[(int)TILE_NEIGHBOUR.SOUTHWEST] == neighbour)
+			return true;
+
+		return false;
+	}
+
+	protected bool IsDiagonalStepAllowed()
+	{
+		TGMap tgm = GameObject.Find("TileMap").GetComponent<TGMap>();
+		if (tgm == null || !tgm.allowDiagonalStep) return false;
+
+		return true;
+	}
 }
