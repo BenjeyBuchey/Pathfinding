@@ -38,6 +38,9 @@ public class AStar : Algorithms {
 			{
 				if (nextTile == null || nextTile.GetTileType() == (int)TILE_TYPE.WATER || nextTile.GetTileType() == (int)TILE_TYPE.WALL) continue;
 
+				// diagonal step check: if neighbour is diagonal but diagonal step not allowed --> we skip
+				if (IsDiagonalNeighbour(currentTile, nextTile) && !IsDiagonalStepAllowed()) continue;
+
 				float newCost = costSoFar[currentTile] + map.GetCostByTileType(nextTile.GetTileType());
 
 				if (!costSoFar.ContainsKey(nextTile) || newCost < costSoFar[nextTile])

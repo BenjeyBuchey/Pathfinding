@@ -36,13 +36,16 @@ public class GreedyBestFirstSearch : Algorithms {
 			{
 				if (nextTile == null || nextTile.GetTileType() == (int)TILE_TYPE.WATER || nextTile.GetTileType() == (int)TILE_TYPE.WALL) continue;
 
+				// diagonal step check: if neighbour is diagonal but diagonal step not allowed --> we skip
+				if (IsDiagonalNeighbour(currentTile, nextTile) && !IsDiagonalStepAllowed()) continue;
+
 				algoTiles.Add(nextTile);
 
 				if (!cameFrom.ContainsKey(nextTile))
 				{
 					priority = Heuristic(end, nextTile) + ComputeVectorCrossProduct(start, end, nextTile); // TODO: add priority field to TDTile? to debug and or display priority in game
 					frontier.Enqueue(nextTile, priority);
-					Debug.Log("Enqueue Tile: " + nextTile.GetHashCode() + " - priority: " + priority);
+					//Debug.Log("Enqueue Tile: " + nextTile.GetHashCode() + " - priority: " + priority);
 					cameFrom.Add(nextTile, currentTile);
 					algoStep.NeighbourTiles.Add(nextTile); // WRONG! WE NEED TO LOOK AT THE TILE WITH LOWEST HEURISTIC FIRST
 				}

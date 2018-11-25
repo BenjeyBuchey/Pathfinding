@@ -10,7 +10,7 @@ public class TDTile {
 	private int type;
 	private int oldTile = -1;
 	private TDTile cameFrom = null;
-	public TDTile[] neighbours = new TDTile[4];
+	public TDTile[] neighbours = new TDTile[8];
 	private int _x, _y;
 
 	public TDTile(int x, int y)
