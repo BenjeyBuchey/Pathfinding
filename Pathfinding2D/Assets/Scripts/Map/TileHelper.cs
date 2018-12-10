@@ -43,12 +43,12 @@ public static class TileHelper
 		go.GetComponent<TileScript>().Steps++;
 	}
 
-	public static void SetSteps(GameObject go, int val)
+	public static void SetSteps(GameObject go, float val)
 	{
 		go.GetComponent<TileScript>().Steps = val;
 	}
 
-	public static int GetSteps(GameObject go)
+	public static float GetSteps(GameObject go)
 	{
 		return go.GetComponent<TileScript>().Steps;
 	}

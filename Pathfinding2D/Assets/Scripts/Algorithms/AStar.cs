@@ -52,6 +52,7 @@ public class AStar : Algorithms {
 						cameFrom.Remove(nextTile);
 					cameFrom.Add(nextTile, currentTile);
 					algoStep.NeighbourTiles.Add(nextTile);
+					TileHelper.SetSteps(nextTile, costSoFar[nextTile]);
 				}
 			}
 

@@ -9,7 +9,7 @@ public class TileScript : MonoBehaviour {
 	private GameObject cameFrom = null;
 	public GameObject[] neighbours = new GameObject[8];
 	private int _x, _y;
-	private int _steps = 0;
+	private float _steps = 0.0f;
 
 	public int X
 	{
@@ -37,7 +37,7 @@ public class TileScript : MonoBehaviour {
 		}
 	}
 
-	public int Steps
+	public float Steps
 	{
 		get
 		{

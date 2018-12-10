@@ -47,7 +47,8 @@ public class GreedyBestFirstSearch : Algorithms {
 					frontier.Enqueue(nextTile, priority);
 					//Debug.Log("Enqueue Tile: " + nextTile.GetHashCode() + " - priority: " + priority);
 					cameFrom.Add(nextTile, currentTile);
-					algoStep.NeighbourTiles.Add(nextTile); // WRONG! WE NEED TO LOOK AT THE TILE WITH LOWEST HEURISTIC FIRST
+					algoStep.NeighbourTiles.Add(nextTile); // WRONG! WE NEED TO LOOK AT THE TILE WITH LOWEST HEURISTIC FIRST ????????????
+					TileHelper.SetSteps(nextTile, TileHelper.GetSteps(currentTile) + 1);
 				}
 			}
 

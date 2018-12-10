@@ -51,6 +51,7 @@ public class Dijkstras : Algorithms {
 					frontier.Enqueue(nextTile, priority);
 					cameFrom.Add(nextTile, currentTile);
 					algoStep.NeighbourTiles.Add(nextTile);
+					TileHelper.SetSteps(nextTile, costSoFar[nextTile]);
 				}
 			}
 
