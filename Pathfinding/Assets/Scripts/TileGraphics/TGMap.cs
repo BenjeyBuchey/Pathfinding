@@ -347,8 +347,6 @@ public class TGMap : MonoBehaviour {
 		tile.SetTileType(tileType);
 
 		texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, spriteArray[tileType]);
-		if (spriteArray[tileType].Equals(tilePixels[tileType]))
-			Debug.Log("YOYOYO");
 		//texture.SetPixels(x * tileResolution, z * tileResolution, tileResolution, tileResolution, tilePixels[tileType]);
 		texture.Apply();
 	}
