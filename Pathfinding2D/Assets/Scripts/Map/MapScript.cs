@@ -15,10 +15,11 @@ public class MapScript : MonoBehaviour {
 	private GameObject[,] tiles;
 	public Sprite[] sprites;
 	private bool isRunning = false, isDragged = false, isPressed = false;   // , isTileMapRefreshed = false
-	public bool visualizeAlgorithms = true, computeVectorCrossProduct = true, allowDiagonalStep = false;
-	public float costGrass = 2.0f, costGround = 1.0f, visualizationDelay;
+	//public bool visualizeAlgorithms = true, computeVectorCrossProduct = true, allowDiagonalStep = false;
+	//public float costGrass = 2.0f, costGround = 1.0f, visualizationDelay;
 	private string selectedAlgorithm = string.Empty;
 	private List<GameObject> _path = new List<GameObject>();
+	private UIManager uiManager;
 
 	// Raycasting
 	GraphicRaycaster raycaster;
@@ -87,6 +88,7 @@ public class MapScript : MonoBehaviour {
 	private void Init()
 	{
 		tiles = new GameObject[tilesY, tilesX];
+		uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
 
 		//Fetch the Raycaster from the GameObject (the Canvas)
 		raycaster = GetComponent<GraphicRaycaster>();
@@ -288,9 +290,9 @@ public class MapScript : MonoBehaviour {
 		switch (type)
 		{
 			case (int)TILE_TYPE.GROUND:
-				return costGround;
+				return GetCostGround();
 			case (int)TILE_TYPE.GRASS:
-				return costGrass;
+				return GetCostGrass();
 			default:
 				return 1.0f;
 		}
@@ -366,7 +368,7 @@ public class MapScript : MonoBehaviour {
 	{
 		isRunning = true;
 
-		if (visualizeAlgorithms)
+		if (uiManager.visualize.isOn)    // visualizeAlgorithms
 			VisualizeAlgorithms(algoSteps, path);
 		else
 			DrawPath(path);
@@ -400,7 +402,7 @@ public class MapScript : MonoBehaviour {
 				}
 			}
 			// wait
-			yield return new WaitForSeconds(visualizationDelay);
+			yield return new WaitForSeconds(GetVisualizationDelay());
 		}
 		DrawPath(path);
 	}
@@ -459,4 +461,31 @@ public class MapScript : MonoBehaviour {
 		//oldTileMap = (TDTile[,])map.GetTiles().Clone();
 		//Graphics.CopyTexture(texture, oldTexture);
 	//}
+
+	private float GetCostGround()
+	{
+		string val = uiManager.costGround.text;
+		float cost = 1.0f;
+		float.TryParse(val, out cost);
+
+		return cost;
+	}
+
+	private float GetCostGrass()
+	{
+		string val = uiManager.costGrass.text;
+		float cost = 2.0f;
+		float.TryParse(val, out cost);
+
+		return cost;
+	}
+
+	private float GetVisualizationDelay()
+	{
+		string val = uiManager.visualizationDelay.text;
+		float delay = 0.0f;
+		float.TryParse(val, out delay);
+
+		return delay;
+	}
 }

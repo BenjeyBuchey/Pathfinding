@@ -56,8 +56,9 @@ public abstract class Algorithms {
 
 	protected float ComputeVectorCrossProduct(GameObject start, GameObject goal, GameObject current)
 	{
-		MapScript tgm = GameObject.Find("Map").GetComponent<MapScript>();
-		if (tgm == null || !tgm.computeVectorCrossProduct) return 0.0f;
+		//MapScript tgm = GameObject.Find("Map").GetComponent<MapScript>();
+		UIManager ui = GameObject.Find("UIManager").GetComponent<UIManager>();
+		if (ui == null || !ui.vectorCrossProduct.isOn) return 0.0f;
 
 		float dx1 = TileHelper.GetX(current) - TileHelper.GetX(goal);
 		float dy1 = TileHelper.GetY(current) - TileHelper.GetY(goal);
@@ -81,8 +82,9 @@ public abstract class Algorithms {
 
 	protected bool IsDiagonalStepAllowed()
 	{
-		MapScript tgm = GameObject.Find("Map").GetComponent<MapScript>();
-		if (tgm == null || !tgm.allowDiagonalStep) return false;
+		//MapScript tgm = GameObject.Find("Map").GetComponent<MapScript>();
+		UIManager ui = GameObject.Find("UIManager").GetComponent<UIManager>();
+		if (ui == null || !ui.diagonalStep.isOn) return false;
 
 		return true;
 	}
