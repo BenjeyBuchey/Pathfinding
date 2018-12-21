@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GameFieldScript.cs" />
     <Compile Include="Assets\Scripts\Algorithms\Algorithms.cs" />
     <Compile Include="Assets\Scripts\Algorithms\AlgorithmStep.cs" />
     <Compile Include="Assets\Scripts\Algorithms\AStar.cs" />
