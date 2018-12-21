@@ -14,7 +14,8 @@ public class UIManager : MonoBehaviour {
 	enum sprite_types { wall = 0, wall_selected, grass, grass_selected, ground, ground_selected, water, water_selected }
 	public GameObject map;
 	public Toggle visualize, vectorCrossProduct, diagonalStep;
-	public InputField costGrass, costGround, visualizationDelay;
+	public InputField costGrass, costGround; // visualizationDelay;
+	public Slider visualizationDelay;
 
 	private void Start()
 	{

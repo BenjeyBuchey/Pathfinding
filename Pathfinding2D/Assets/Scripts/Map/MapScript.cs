@@ -482,10 +482,10 @@ public class MapScript : MonoBehaviour {
 
 	private float GetVisualizationDelay()
 	{
-		string val = uiManager.visualizationDelay.text;
-		float delay = 0.0f;
-		float.TryParse(val, out delay);
+		//string val = uiManager.visualizationDelay.value
+		//float delay = 0.0f;
+		//float.TryParse(val, out delay);
 
-		return delay;
+		return uiManager.visualizationDelay.value;
 	}
 }
