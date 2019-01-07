@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour {
 	private bool isButtonWallSelected = false, isButtonGrassSelected = false, isButtonGroundSelected = false, isButtonWaterSelected = false;
 	private Sprite[] sprites;
 	enum sprite_types { wall = 0, wall_selected, grass, grass_selected, ground, ground_selected, water, water_selected }
-	public GameObject map;
 	public Toggle visualize, vectorCrossProduct, diagonalStep;
 	public InputField costGrass, costGround; // visualizationDelay;
 	public Slider visualizationDelay;
@@ -47,14 +46,22 @@ public class UIManager : MonoBehaviour {
 
 	public void StartAlgorithm()
 	{
-		MapScript ms = map.GetComponent<MapScript>();
-		ms.StartAlgorithm(algorithms[dropdown.value]);
+		GameObject[] maps = GameObject.FindGameObjectsWithTag("Map");
+		foreach (GameObject map in maps)
+		{
+			MapScript ms = map.GetComponent<MapScript>();
+			ms.StartAlgorithm(algorithms[dropdown.value]);
+		}
 	}
 
 	public void Clear()
 	{
-		MapScript ms = map.GetComponent<MapScript>();
-		ms.ClearAlgorithm();
+		GameObject[] maps = GameObject.FindGameObjectsWithTag("Map");
+		foreach (GameObject map in maps)
+		{
+			MapScript ms = map.GetComponent<MapScript>();
+			ms.ClearAlgorithm();
+		}
 	}
 
 	public void WallButtonClicked()
@@ -145,5 +152,11 @@ public class UIManager : MonoBehaviour {
 			return (int)TILE_TYPE.GRASS;
 		else
 			return -1;
+	}
+
+	public void TestNewMap()
+	{
+		GameFieldScript gfs = GameObject.Find("GameField").GetComponent<GameFieldScript>();
+		gfs.SpawnNewMap();
 	}
 }

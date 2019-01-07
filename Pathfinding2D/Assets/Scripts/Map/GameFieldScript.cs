@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameFieldScript : MonoBehaviour {
 
 	private float initWidth, initHeight;
+	public GameObject _map;
 	// Use this for initialization
 	void Start () {
 		//initWidth = this.gameObject.GetComponent<RectTransform>().rect.width;
@@ -35,5 +36,13 @@ public class GameFieldScript : MonoBehaviour {
 		//	Vector2 newSize = new Vector2(width / newCols, width / newCols);
 		//	this.gameObject.GetComponent<GridLayoutGroup>().cellSize = newSize;
 		//}
+	}
+
+	public void SpawnNewMap()
+	{
+		// TODO: check total number of maps, resize if needed, set positions, small border between maps
+		GameObject map = Instantiate(_map, gameObject.transform);
+		RectTransform rt = map.GetComponent<RectTransform>();
+		rt.sizeDelta = new Vector2(325, 325);
 	}
 }

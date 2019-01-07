@@ -304,9 +304,6 @@
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>C:/Users/Benjey/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.StandardEvents">
-      <HintPath>C:/Users/Benjey/Documents/Programming/Pathfinding2D/Pathfinding2D/Packages/com.unity.standardevents/UnityEngine.StandardEvents.dll</HintPath>
-    </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/2015/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>

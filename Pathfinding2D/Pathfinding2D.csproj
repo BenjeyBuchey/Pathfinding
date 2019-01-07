@@ -253,9 +253,6 @@
     <Reference Include="UnityEngine.Analytics">
       <HintPath>C:/Users/Benjey/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.StandardEvents">
-      <HintPath>C:/Users/Benjey/Documents/Programming/Pathfinding2D/Pathfinding2D/Packages/com.unity.standardevents/UnityEngine.StandardEvents.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\unity\mscorlib.dll</HintPath>
     </Reference>
@@ -310,6 +307,7 @@
     <Compile Include="Assets\Scripts\Algorithms\Dijkstras.cs" />
     <Compile Include="Assets\Scripts\Algorithms\GreedyBestFirstSearch.cs" />
     <Compile Include="Assets\Scripts\AutoGridLayout\AutoGridLayout.cs" />
+    <Compile Include="Assets\Scripts\Map\GameFieldScript.cs" />
     <Compile Include="Assets\Scripts\Map\MapScript.cs" />
     <Compile Include="Assets\Scripts\Map\TileHelper.cs" />
     <Compile Include="Assets\Scripts\Map\TileScript.cs" />
