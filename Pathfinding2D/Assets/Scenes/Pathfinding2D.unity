@@ -323,11 +323,11 @@ RectTransform:
   m_Father: {fileID: 971994544}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.056, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.92318755}
-  m_AnchoredPosition: {x: 98.350006, y: -162.5}
-  m_SizeDelta: {x: 196.70001, y: 325}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 56.99997, y: -59}
+  m_SizeDelta: {x: 650, y: 650}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &307843908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2044,7 +2044,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropdown: {fileID: 1933543237}
-  map: {fileID: 2138354681}
   visualize: {fileID: 1557175452}
   vectorCrossProduct: {fileID: 1937774886}
   diagonalStep: {fileID: 1556748114}
@@ -2340,7 +2339,7 @@ Prefab:
     - target: {fileID: 224022698195211048, guid: ae7cdd75c4b8f89439eeb3bb99433e14,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -650
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224022698195211048, guid: ae7cdd75c4b8f89439eeb3bb99433e14,
         type: 2}
@@ -2380,7 +2379,7 @@ Prefab:
     - target: {fileID: 224022698195211048, guid: ae7cdd75c4b8f89439eeb3bb99433e14,
         type: 2}
       propertyPath: m_Pivot.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae7cdd75c4b8f89439eeb3bb99433e14, type: 2}
@@ -5120,11 +5119,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2131320251}
   m_CullTransparentMesh: 0
---- !u!1 &2138354681 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1828561024298590, guid: ae7cdd75c4b8f89439eeb3bb99433e14,
-    type: 2}
-  m_PrefabInternal: {fileID: 1319619198}
 --- !u!224 &2138354682 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224022698195211048, guid: ae7cdd75c4b8f89439eeb3bb99433e14,
