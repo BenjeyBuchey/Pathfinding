@@ -154,9 +154,15 @@ public class UIManager : MonoBehaviour {
 			return -1;
 	}
 
-	public void TestNewMap()
+	public void SpawnNewMap()
 	{
 		GameFieldScript gfs = GameObject.Find("GameField").GetComponent<GameFieldScript>();
 		gfs.SpawnNewMap();
+	}
+
+	public void RemoveMap()
+	{
+		GameFieldScript gfs = GameObject.Find("GameField").GetComponent<GameFieldScript>();
+		gfs.RemoveMap();
 	}
 }

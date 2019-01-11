@@ -19,6 +19,7 @@ public class GameFieldScript : MonoBehaviour {
 	{
 		int newMapCount = GameObject.FindGameObjectsWithTag("Map").Length+1;
 		Debug.Log("CURRENT #Maps: " + newMapCount);
+		if (newMapCount > 9) return;
 
 		if (newMapCount > mapSizeDivider * mapSizeDivider) mapSizeDivider++;
 
@@ -26,10 +27,26 @@ public class GameFieldScript : MonoBehaviour {
 		ResizeAndSetPositions();
 	}
 
+	public void RemoveMap()
+	{
+		int newMapCount = GameObject.FindGameObjectsWithTag("Map").Length - 1;
+		Debug.Log("CURRENT #Maps: " + newMapCount);
+		if (newMapCount < 1) return;
+
+		if (newMapCount <= (mapSizeDivider-1) * (mapSizeDivider-1)) mapSizeDivider--;
+
+		// remove last map
+		GameObject[] maps = GameObject.FindGameObjectsWithTag("Map");
+		Destroy(maps[maps.Length - 1]);
+
+		ResizeAndSetPositions();
+	}
+
 	private void ResizeAndSetPositions()
 	{
 		// + in x axis, - in y axis
 		GameObject[] maps = GameObject.FindGameObjectsWithTag("Map");
+		if (maps == null || maps.Length == 0) return;
 
 		int mapIndex = 0;
 		// y = rows, x = columns
