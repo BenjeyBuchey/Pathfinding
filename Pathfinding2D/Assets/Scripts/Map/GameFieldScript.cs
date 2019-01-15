@@ -10,6 +10,7 @@ public class GameFieldScript : MonoBehaviour {
 	public GameObject _map;
 	private int mapSizeDivider = 1, border = 10;
 	private int maxMaps = 4;
+	private int mapCount = 1;
 	// Use this for initialization
 	void Start () {
 		initWidth = this.gameObject.GetComponent<RectTransform>().rect.width;
@@ -25,6 +26,7 @@ public class GameFieldScript : MonoBehaviour {
 
 		GameObject map = Instantiate(_map, gameObject.transform);
 		ResizeAndSetPositions();
+		mapCount++;
 	}
 
 	public void RemoveMap()
@@ -39,6 +41,7 @@ public class GameFieldScript : MonoBehaviour {
 		Destroy(maps[maps.Length - 1]);
 
 		ResizeAndSetPositions();
+		mapCount--;
 	}
 
 	private void ResizeAndSetPositions()
@@ -66,5 +69,10 @@ public class GameFieldScript : MonoBehaviour {
 			}
 			if (mapIndex >= maps.Length) break;
 		}
+	}
+
+	public int GetMapCount()
+	{
+		return mapCount;
 	}
 }

@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour {
 	public Toggle visualize, vectorCrossProduct, diagonalStep;
 	public InputField costGrass, costGround; // visualizationDelay;
 	public Slider visualizationDelay;
+	public Dropdown dropdownMap1, dropdownMap2, dropdownMap3, dropdownMap4;
+	private List<Dropdown> dropdowns;
 
 	private void Start()
 	{
@@ -47,10 +49,16 @@ public class UIManager : MonoBehaviour {
 	public void StartAlgorithm()
 	{
 		GameObject[] maps = GameObject.FindGameObjectsWithTag("Map");
-		foreach (GameObject map in maps)
+		//foreach (GameObject map in maps)
+		//{
+		//	MapScript ms = map.GetComponent<MapScript>();
+		//	ms.StartAlgorithm(algorithms[dropdown.value]);
+		//}
+
+		for(int i = 0; i < maps.Length; i++)
 		{
-			MapScript ms = map.GetComponent<MapScript>();
-			ms.StartAlgorithm(algorithms[dropdown.value]);
+			MapScript ms = maps[i].GetComponent<MapScript>();
+			ms.StartAlgorithm(algorithms[dropdowns[i].value]);
 		}
 	}
 
@@ -138,6 +146,31 @@ public class UIManager : MonoBehaviour {
 	private void PopulateList()
 	{
 		dropdown.AddOptions(algorithms);
+
+		dropdowns = new List<Dropdown>();
+		dropdowns.Add(dropdownMap1);
+		dropdowns.Add(dropdownMap2);
+		dropdowns.Add(dropdownMap3);
+		dropdowns.Add(dropdownMap4);
+
+		ShowElement(dropdownMap2.gameObject, false);
+		ShowElement(dropdownMap3.gameObject, false);
+		ShowElement(dropdownMap4.gameObject, false);
+
+		foreach (Dropdown d in dropdowns)
+		{
+			d.AddOptions(algorithms);
+		}
+	}
+
+	private void HideElement(GameObject go)
+	{
+		go.SetActive(false);
+	}
+
+	private void ShowElement(GameObject go, bool visible)
+	{
+		go.SetActive(visible);
 	}
 
 	public int GetSelectedButtonTile()
@@ -158,11 +191,25 @@ public class UIManager : MonoBehaviour {
 	{
 		GameFieldScript gfs = GameObject.Find("GameField").GetComponent<GameFieldScript>();
 		gfs.SpawnNewMap();
+		ManageDropdownsAfterChange();
 	}
 
 	public void RemoveMap()
 	{
 		GameFieldScript gfs = GameObject.Find("GameField").GetComponent<GameFieldScript>();
 		gfs.RemoveMap();
+		ManageDropdownsAfterChange();
+	}
+
+	private void ManageDropdownsAfterChange()
+	{
+		GameFieldScript gfs = GameObject.Find("GameField").GetComponent<GameFieldScript>();
+		int mapCount = gfs.GetMapCount();
+
+		for(int i = 0; i < dropdowns.Count; i++)
+		{
+			bool visible = (i <= (mapCount - 1)) ? true : false;
+			ShowElement(dropdowns[i].gameObject, visible);
+		}
 	}
 }
