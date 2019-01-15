@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\GameFieldScript.cs" />
     <Compile Include="Assets\Scripts\Algorithms\Algorithms.cs" />
     <Compile Include="Assets\Scripts\Algorithms\AlgorithmStep.cs" />
     <Compile Include="Assets\Scripts\Algorithms\AStar.cs" />
@@ -69,6 +68,7 @@
     <Compile Include="Assets\Scripts\Algorithms\Dijkstras.cs" />
     <Compile Include="Assets\Scripts\Algorithms\GreedyBestFirstSearch.cs" />
     <Compile Include="Assets\Scripts\AutoGridLayout\AutoGridLayout.cs" />
+    <Compile Include="Assets\Scripts\Map\GameFieldScript.cs" />
     <Compile Include="Assets\Scripts\Map\MapScript.cs" />
     <Compile Include="Assets\Scripts\Map\TileHelper.cs" />
     <Compile Include="Assets\Scripts\Map\TileScript.cs" />

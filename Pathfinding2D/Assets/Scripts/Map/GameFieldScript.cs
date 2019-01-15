@@ -9,6 +9,7 @@ public class GameFieldScript : MonoBehaviour {
 	private float initWidth, initHeight;
 	public GameObject _map;
 	private int mapSizeDivider = 1, border = 10;
+	private int maxMaps = 4;
 	// Use this for initialization
 	void Start () {
 		initWidth = this.gameObject.GetComponent<RectTransform>().rect.width;
@@ -18,8 +19,7 @@ public class GameFieldScript : MonoBehaviour {
 	public void SpawnNewMap()
 	{
 		int newMapCount = GameObject.FindGameObjectsWithTag("Map").Length+1;
-		Debug.Log("CURRENT #Maps: " + newMapCount);
-		if (newMapCount > 9) return;
+		if (newMapCount > maxMaps) return;
 
 		if (newMapCount > mapSizeDivider * mapSizeDivider) mapSizeDivider++;
 
@@ -30,7 +30,6 @@ public class GameFieldScript : MonoBehaviour {
 	public void RemoveMap()
 	{
 		int newMapCount = GameObject.FindGameObjectsWithTag("Map").Length - 1;
-		Debug.Log("CURRENT #Maps: " + newMapCount);
 		if (newMapCount < 1) return;
 
 		if (newMapCount <= (mapSizeDivider-1) * (mapSizeDivider-1)) mapSizeDivider--;
