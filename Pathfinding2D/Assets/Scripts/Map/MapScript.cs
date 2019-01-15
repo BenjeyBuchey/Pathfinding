@@ -27,10 +27,11 @@ public class MapScript : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-		SetNumberOfTiles();
-		Init();
-		SpawnTiles();
-		SetStartEndPoints();
+		//SetNumberOfTiles();
+		//Init();
+		//SpawnTiles();
+		//SetStartEndPoints();
+		//Debug.Log("Finished initializing map");
 	}
 	
 	// Update is called once per frame
@@ -47,7 +48,7 @@ public class MapScript : MonoBehaviour {
 			DrawTiles(tileType);
 	}
 
-	void SpawnTiles()
+	public void SpawnTiles(GameObject[,] tilesToCopy)
 	{
 		for(int y = 0; y < tilesY; y++)
 		{
@@ -55,7 +56,14 @@ public class MapScript : MonoBehaviour {
 			{
 				GameObject go = Instantiate(tile, this.transform);
 				tiles[y, x] = go;
+				if (tiles[y, x] == null) Debug.Log("NULL: " + tiles[y, x]);
 				TileHelper.SetCoordinates(tiles[y, x], x, y);
+
+				// copy tiletype from map1
+				if (tilesToCopy != null && tilesToCopy[y, x] != null)
+				{
+					CopyTile(tilesToCopy[y, x], tiles[y, x]);
+				}
 
 				// set neighbours
 				tiles[y, x].GetComponent<TileScript>().neighbours[(int)TILE_NEIGHBOUR.SOUTH] = (y <= 0) ? null : tiles[y - 1, x];
@@ -79,14 +87,28 @@ public class MapScript : MonoBehaviour {
 		}
 	}
 
-	void SetNumberOfTiles()
+	private void CopyTile(GameObject tileToCopy, GameObject tile)
+	{
+		int tileType = tileToCopy.GetComponent<TileScript>().GetTileType();
+		tile.GetComponent<TileScript>().SetTileType(tileType);
+		tile.GetComponent<Image>().sprite = sprites[tileType];
+
+		if (tileType == (int)TILE_TYPE.STARTPOINT)
+			start = tile;
+		if (tileType == (int)TILE_TYPE.ENDPOINT)
+			end = tile;
+	}
+
+	private void SetNumberOfTiles()
 	{
 		AutoGridLayout agl = gameObject.GetComponent<AutoGridLayout>();
 		agl.m_Column = tilesX;
 	}
 
-	private void Init()
+	public void Init()
 	{
+		SetNumberOfTiles();
+
 		tiles = new GameObject[tilesY, tilesX];
 		uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
 
@@ -94,7 +116,7 @@ public class MapScript : MonoBehaviour {
 		raycaster = GetComponent<GraphicRaycaster>();
 	}
 
-	private void SetStartEndPoints()
+	public void SetStartEndPoints()
 	{
 		// Start
 		int xStart = 0, yStart = 0;
@@ -189,24 +211,14 @@ public class MapScript : MonoBehaviour {
 			GameObject tile = GetSelectedTile();
 			if (tile == null) return;
 
-			//if (!isPressed)
-			//	ClearMap();
-
 			isPressed = true;
 
 			if (GetTileType(tile) != (int)TILE_TYPE.STARTPOINT && GetTileType(tile) != (int)TILE_TYPE.ENDPOINT)
 				SetTileType(tile, tileType);
-
-
-			//SetTileTextureSelfMapCreation(tile, tileType, x, z);
-			//RefreshMap();
 		}
 
 		if (Input.GetMouseButtonUp(0))
 		{
-			//if (isPressed)
-			//	RefreshAlgorithm();
-
 			isPressed = false;
 		}
 	}
@@ -221,38 +233,6 @@ public class MapScript : MonoBehaviour {
 
 		// set new tile
 		SetTileType(selectedTile, newTileType);
-
-		//if (visualizeAlgorithms)
-		//{
-		//	// full visualization
-		//	// we clear map but don't draw new visualization yet. we do that after mouse gets released
-		//	ClearMap();
-
-		//	// set last tile
-		//	SetLastTile(selectedTile);
-
-		//	// set new tile
-		//	SetTileType(selectedTile, newTileType);
-
-		//	// set current map
-		//	//RefreshMap();
-		//}
-		//else
-		//{
-		//	// only path
-		//	// clear map, draw new path
-		//	ClearMap();
-
-		//	// set last tile
-		//	SetLastTile(selectedTile);
-
-		//	// set new tile
-		//	SetTileType(selectedTile, newTileType);
-
-		//	// refresh map and draw new path
-		//	//RefreshMap();
-		//	//RefreshAlgorithm();
-		//}
 	}
 
 	private void SetLastTile(GameObject currentTile)
@@ -304,10 +284,8 @@ public class MapScript : MonoBehaviour {
 
 		ClearAlgorithm();
 
-		//RefreshMap();
-
 		selectedAlgorithm = algorithm;
-		//isRunning = true;
+
 		RefreshAlgorithm();
 	}
 
@@ -372,8 +350,6 @@ public class MapScript : MonoBehaviour {
 			VisualizeAlgorithms(algoSteps, path);
 		else
 			DrawPath(path);
-
-		//isRunning = false;
 	}
 
 	private void VisualizeAlgorithms(List<AlgorithmStep> algoSteps, List<GameObject> path)
@@ -433,9 +409,6 @@ public class MapScript : MonoBehaviour {
 	private void ClearMap()
 	{
 		// reset all tiles that PATH PATH_NEXT PATH_CURRENT
-
-		//if (isTileMapRefreshed)
-		//{
 			for(int y = 0; y < tilesY; y++)
 			{
 				for(int x = 0; x < tilesX; x++)
@@ -449,18 +422,8 @@ public class MapScript : MonoBehaviour {
 				}
 				}
 			}
-		//}
 		_path.Clear();
-		//isTileMapRefreshed = false;
 	}
-
-	//private void RefreshMap()
-	//{
-		//isTileMapRefreshed = true;
-		//ClearMap();
-		//oldTileMap = (TDTile[,])map.GetTiles().Clone();
-		//Graphics.CopyTexture(texture, oldTexture);
-	//}
 
 	private float GetCostGround()
 	{
@@ -482,10 +445,30 @@ public class MapScript : MonoBehaviour {
 
 	private float GetVisualizationDelay()
 	{
-		//string val = uiManager.visualizationDelay.value
-		//float delay = 0.0f;
-		//float.TryParse(val, out delay);
-
 		return uiManager.visualizationDelay.value;
+	}
+
+	public GameObject[,] GetTiles()
+	{
+		return tiles;
+	}
+
+	public void CopyMapAppearance(GameObject[,] tilesToCopy)
+	{
+		if (tilesToCopy == null) return;
+		Debug.Log("Trying to copy map1");
+		for (int y = 0; y < tilesY; y++)
+		{
+			for (int x = 0; x < tilesX; x++)
+			{
+				int tileType = tilesToCopy[y, x].GetComponent<TileScript>().GetTileType();
+				int oldTileType = tiles[y, x].GetComponent<TileScript>().GetTileType();
+				if (tileType != oldTileType)
+					Debug.Log("OLD: " + oldTileType + " - NEW: " + tileType);
+
+				tiles[y, x].GetComponent<TileScript>().SetTileType(tileType);
+				tiles[y, x].GetComponent<Image>().sprite = sprites[tileType];
+			}
+		}
 	}
 }

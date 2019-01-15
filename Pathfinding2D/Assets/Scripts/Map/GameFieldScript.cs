@@ -15,18 +15,24 @@ public class GameFieldScript : MonoBehaviour {
 	void Start () {
 		initWidth = this.gameObject.GetComponent<RectTransform>().rect.width;
 		initHeight = this.gameObject.GetComponent<RectTransform>().rect.height;
+		SpawnNewMap();
 	}
 
 	public void SpawnNewMap()
 	{
-		int newMapCount = GameObject.FindGameObjectsWithTag("Map").Length+1;
+		GameObject[] maps = GameObject.FindGameObjectsWithTag("Map");
+		int newMapCount = maps.Length+1;
 		if (newMapCount > maxMaps) return;
 
 		if (newMapCount > mapSizeDivider * mapSizeDivider) mapSizeDivider++;
 
 		GameObject map = Instantiate(_map, gameObject.transform);
-		ResizeAndSetPositions();
+		GameObject mapToCopy = maps.Length > 0 ? maps[0] : null;
 		mapCount++;
+
+		ResizeAndSetPositions();
+
+		HandleNewMap(mapToCopy, map);
 	}
 
 	public void RemoveMap()
@@ -74,5 +80,22 @@ public class GameFieldScript : MonoBehaviour {
 	public int GetMapCount()
 	{
 		return mapCount;
+	}
+
+	public void CopyMapAppearance(GameObject mapToCopy, GameObject newMap)
+	{
+		if (mapToCopy == null || newMap == null) return;
+
+		GameObject[,] tilesToCopy = mapToCopy.GetComponent<MapScript>().GetTiles();
+		newMap.GetComponent<MapScript>().CopyMapAppearance(tilesToCopy);
+	}
+
+	private void HandleNewMap(GameObject mapToCopy, GameObject newMap)
+	{
+		newMap.GetComponent<MapScript>().Init();
+		GameObject[,] tilesToCopy = mapToCopy == null ? null : mapToCopy.GetComponent<MapScript>().GetTiles();
+		newMap.GetComponent<MapScript>().SpawnTiles(tilesToCopy);
+		if (mapToCopy == null)
+			newMap.GetComponent<MapScript>().SetStartEndPoints();
 	}
 }
