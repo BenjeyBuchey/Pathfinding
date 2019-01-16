@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 	
-	public Dropdown dropdown;
 	List<string> algorithms = new List<string>() { TileHelper.bfs, TileHelper.dijkstra, TileHelper.gbfs, TileHelper.astar };
 	//public Sprite buttonWall, buttonWallSelected, buttonGrass, buttonGrassSelected, buttonWater, buttonWaterSelected, buttonGround, buttonGroundSelected;
 	private bool isButtonWallSelected = false, isButtonGrassSelected = false, isButtonGroundSelected = false, isButtonWaterSelected = false;
@@ -145,8 +144,6 @@ public class UIManager : MonoBehaviour {
 
 	private void PopulateList()
 	{
-		dropdown.AddOptions(algorithms);
-
 		dropdowns = new List<Dropdown>();
 		dropdowns.Add(dropdownMap1);
 		dropdowns.Add(dropdownMap2);
