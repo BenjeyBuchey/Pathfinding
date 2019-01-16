@@ -90,6 +90,11 @@ public class MapScript : MonoBehaviour {
 	private void CopyTile(GameObject tileToCopy, GameObject tile)
 	{
 		int tileType = tileToCopy.GetComponent<TileScript>().GetTileType();
+		// whitelist tiles that shall be copied
+		if (tileType != (int)TILE_TYPE.STARTPOINT && tileType != (int)TILE_TYPE.ENDPOINT && tileType != (int)TILE_TYPE.GROUND && tileType != (int)TILE_TYPE.GRASS &&
+			tileType != (int)TILE_TYPE.WATER && tileType != (int)TILE_TYPE.WALL)
+			return;
+
 		tile.GetComponent<TileScript>().SetTileType(tileType);
 		tile.GetComponent<Image>().sprite = sprites[tileType];
 
