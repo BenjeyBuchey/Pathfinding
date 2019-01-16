@@ -10,7 +10,7 @@ public class GameFieldScript : MonoBehaviour {
 	public GameObject _map;
 	private int mapSizeDivider = 1, border = 10;
 	private int maxMaps = 4;
-	private int mapCount = 1;
+	private int mapCount = 0;
 	// Use this for initialization
 	void Start () {
 		initWidth = this.gameObject.GetComponent<RectTransform>().rect.width;
@@ -80,14 +80,6 @@ public class GameFieldScript : MonoBehaviour {
 	public int GetMapCount()
 	{
 		return mapCount;
-	}
-
-	public void CopyMapAppearance(GameObject mapToCopy, GameObject newMap)
-	{
-		if (mapToCopy == null || newMap == null) return;
-
-		GameObject[,] tilesToCopy = mapToCopy.GetComponent<MapScript>().GetTiles();
-		newMap.GetComponent<MapScript>().CopyMapAppearance(tilesToCopy);
 	}
 
 	private void HandleNewMap(GameObject mapToCopy, GameObject newMap)
