@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,15 +12,14 @@ public class MapScript : MonoBehaviour {
 
 	public GameObject tile;
 	private GameObject start, end, lastTile;
-	public int tilesX = 25, tilesY = 25, draggedTileType = -1;
+	public int tilesX = 25, tilesY = 25, draggedTileType = -1, _visualizationCounter = 0;
 	private GameObject[,] tiles;
 	public Sprite[] sprites;
-	private bool isRunning = false, isDragged = false, isPressed = false;   // , isTileMapRefreshed = false
-	//public bool visualizeAlgorithms = true, computeVectorCrossProduct = true, allowDiagonalStep = false;
-	//public float costGrass = 2.0f, costGround = 1.0f, visualizationDelay;
+	private bool isRunning = false, isDragged = false, isPressed = false, _isBusy = false;
 	private string selectedAlgorithm = string.Empty;
 	private List<GameObject> _path = new List<GameObject>();
 	private UIManager uiManager;
+    private List<AlgorithmStep> _algoSteps = new List<AlgorithmStep>();
 
 	// Raycasting
 	GraphicRaycaster raycaster;
@@ -27,11 +27,7 @@ public class MapScript : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-		//SetNumberOfTiles();
-		//Init();
-		//SpawnTiles();
-		//SetStartEndPoints();
-		//Debug.Log("Finished initializing map");
+
 	}
 	
 	// Update is called once per frame
@@ -142,8 +138,8 @@ public class MapScript : MonoBehaviour {
 
 	private void GetRandomPoint(ref int x, ref int y)
 	{
-		x = Random.Range(0, tilesX);
-		y = Random.Range(0, tilesY);
+		x = UnityEngine.Random.Range(0, tilesX);
+		y = UnityEngine.Random.Range(0, tilesY);
 	}
 
 	private void SetTileType(GameObject go, int tileType)
@@ -319,32 +315,36 @@ public class MapScript : MonoBehaviour {
 	{
 		BreadthFirstSearch algo = new BreadthFirstSearch();
 		algo.StartAlgorithm(start, end);
+        _algoSteps = algo.GetAlgoSteps();
 
-		Visualize(algo.GetPath(), algo.GetAlgoSteps());
+        Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
 	public void StartAlgorithmDijkstra()
 	{
 		Dijkstras algo = new Dijkstras();
 		algo.StartAlgorithm(start, end, this);
+        _algoSteps = algo.GetAlgoSteps();
 
-		Visualize(algo.GetPath(), algo.GetAlgoSteps());
+        Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
 	public void StartAlgorithmAStar()
 	{
 		AStar algo = new AStar();
 		algo.StartAlgorithm(start, end, this);
+        _algoSteps = algo.GetAlgoSteps();
 
-		Visualize(algo.GetPath(), algo.GetAlgoSteps());
+        Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
 	public void StartAlgorithmGBFS()
 	{
 		GreedyBestFirstSearch algo = new GreedyBestFirstSearch();
 		algo.StartAlgorithm(start, end, this);
+        _algoSteps = algo.GetAlgoSteps();
 
-		Visualize(algo.GetPath(), algo.GetAlgoSteps());
+        Visualize(algo.GetPath(), algo.GetAlgoSteps());
 	}
 
 	private void Visualize(List<GameObject> path, List<AlgorithmStep> algoSteps)
@@ -364,14 +364,16 @@ public class MapScript : MonoBehaviour {
 
 	IEnumerator DoVisualizeAlgorithms(List<AlgorithmStep> algoSteps, List<GameObject> path)
 	{
-		foreach (AlgorithmStep algoStep in algoSteps)
+        for(;_visualizationCounter < _algoSteps.Count; _visualizationCounter++)
+		//foreach (AlgorithmStep algoStep in algoSteps)
 		{
-			// TODO: PATH_CURRENT_START TILE
-			// PATH_NEXT_START TILE
+            while (IsPaused() || _isBusy) // completely break here? when resume is pressed start this coroutine ??
+                yield return null;
 
-
-			// set current tile
-			if (algoStep.CurrentTile != start && algoStep.CurrentTile != end)
+            AlgorithmStep algoStep = algoSteps[_visualizationCounter];
+            if (algoStep == null) continue;
+            // set current tile
+            if (algoStep.CurrentTile != start && algoStep.CurrentTile != end)
 				SetTileType(algoStep.CurrentTile, (int)TILE_TYPE.PATH_CURRENT);
 
 			foreach (GameObject next in algoStep.NeighbourTiles)
@@ -385,10 +387,20 @@ public class MapScript : MonoBehaviour {
 			// wait
 			yield return new WaitForSeconds(GetVisualizationDelay());
 		}
-		DrawPath(path);
+        DrawPath(path);
+        //yield break; // CAN USE THIS TO GO TO END
 	}
 
-	private void DrawPath(List<GameObject> path)
+    IEnumerator DoStepBackwards(List<AlgorithmStep> algoSteps, List<GameObject> path)
+    {
+        // need algoSteps as member variable. isBusy variable.
+        // set current tile to PATH_NEXT
+        // set neighbourtiles to old tile type!? and remove text
+
+        yield break;
+    }
+
+    private void DrawPath(List<GameObject> path)
 	{
 		if (path == null) return;
 
@@ -428,6 +440,8 @@ public class MapScript : MonoBehaviour {
 				}
 			}
 		_path.Clear();
+        _algoSteps.Clear();
+        _visualizationCounter = 0;
 	}
 
 	private float GetCostGround()
@@ -476,4 +490,12 @@ public class MapScript : MonoBehaviour {
 			}
 		}
 	}
+
+    private bool IsPaused()
+    {
+        GameObject uiControls = GameObject.Find("UIControls");
+        if (uiControls == null) return false;
+
+        return uiControls.GetComponent<UIControls>().IsPaused;
+    }
 }
