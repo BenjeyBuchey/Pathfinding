@@ -20,10 +20,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 879, y: 492}
-  m_MaxSize: {x: 16004, y: 14042}
+  m_MinSize: {x: 879, y: 471}
+  m_MaxSize: {x: 16004, y: 14021}
   vertical: 0
-  controlID: 10333
+  controlID: 11796
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -123,10 +123,10 @@ MonoBehaviour:
     y: 0
     width: 1546
     height: 947
-  m_MinSize: {x: 604, y: 492}
-  m_MaxSize: {x: 12004, y: 14042}
+  m_MinSize: {x: 604, y: 471}
+  m_MaxSize: {x: 12004, y: 14021}
   vertical: 1
-  controlID: 10334
+  controlID: 11797
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_MinSize: {x: 604, y: 221}
   m_MaxSize: {x: 12004, y: 4021}
   vertical: 0
-  controlID: 10301
+  controlID: 11798
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -169,8 +169,8 @@ MonoBehaviour:
     y: 0
     width: 269
     height: 577
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 6}
   m_Panes:
   - {fileID: 6}
@@ -203,9 +203,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c0ccfbff
-    m_LastClickedID: -275264
-    m_ExpandedIDs: 382df6ffd89cfbffde9cfbffbeccfbff4ef4ffff000000002e350000f2350000
+    m_SelectedIDs: 4e320000
+    m_LastClickedID: 0
+    m_ExpandedIDs: 382df6ffd89cfbffde9cfbffbeccfbff4ef4ffff000000004e3400002e350000f2350000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_MinSize: {x: 404, y: 221}
   m_MaxSize: {x: 8004, y: 4021}
   vertical: 0
-  controlID: 10167
+  controlID: 11799
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -445,19 +445,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/UI
+    - Assets/Prefabs
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/UI
+  - Assets/Prefabs
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Benjey\Documents\GitHub\Pathfinding\Pathfinding2D
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: d8320000
-    m_LastClickedID: 13016
+    m_SelectedIDs: be310000
+    m_LastClickedID: 12734
     m_ExpandedIDs: 00000000b63100001e32000042320000503200008032000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -511,8 +511,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: c0ccfbff
-    m_LastClickedInstanceID: -275264
+    m_SelectedInstanceIDs: 4e320000
+    m_LastClickedInstanceID: 12878
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: e4040000e60400000a1c00000a050000662500003a66fffff62400004e250000f824000050250000042600007e26000068260000e22600004e45feff6a260000d02f00007a300000f226000012270000c02f0000c82f00005c270000d22c0000dc2f0000ee270000b82b00002c2d0000a0310000000000004038000084e1fdfffe2a0000843b00006e4800006c2c0000ba2c000092300000
     m_RenameOverlay:

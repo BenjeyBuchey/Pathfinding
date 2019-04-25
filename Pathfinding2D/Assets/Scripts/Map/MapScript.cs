@@ -20,12 +20,26 @@ public class MapScript : MonoBehaviour {
 	private List<GameObject> _path = new List<GameObject>();
 	private UIManager uiManager;
     private List<AlgorithmStep> _algoSteps = new List<AlgorithmStep>();
+    private string summary = string.Empty;
 
 	// Raycasting
 	GraphicRaycaster raycaster;
 
-	// Use this for initialization
-	void Start ()
+    public string Summary
+    {
+        get
+        {
+            return summary;
+        }
+
+        set
+        {
+            summary = value;
+        }
+    }
+
+    // Use this for initialization
+    void Start ()
 	{
 
 	}
@@ -614,14 +628,18 @@ public class MapScript : MonoBehaviour {
     {
         if (uiManager == null) return;
 
-        uiManager.GetComponent<UIManager>().summary.text += selectedAlgorithm + ": " + _path[_path.Count - 1].GetComponent<TileScript>().Steps + System.Environment.NewLine;
+        summary = selectedAlgorithm + ": " + _path[_path.Count - 1].GetComponent<TileScript>().Steps + System.Environment.NewLine;
+        uiManager.GetComponent<UIManager>().UpdateSummary();
+        //uiManager.GetComponent<UIManager>().summary.text += selectedAlgorithm + ": " + _path[_path.Count - 1].GetComponent<TileScript>().Steps + System.Environment.NewLine;
     }
 
     private void ClearSummary()
     {
         if (uiManager == null) return;
 
-        uiManager.GetComponent<UIManager>().summary.text = String.Empty;
+        summary = string.Empty;
+        uiManager.GetComponent<UIManager>().UpdateSummary();
+        //uiManager.GetComponent<UIManager>().summary.text = String.Empty;
     }
 
 	public void ClearAlgorithm()
@@ -647,7 +665,8 @@ public class MapScript : MonoBehaviour {
 					}
 				}
 			}
-		_path.Clear();
+        TileHelper.ClearTile(end);
+        _path.Clear();
         _algoSteps.Clear();
         _visualizationCounter = 0;
         ClearSummary();

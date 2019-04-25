@@ -25,7 +25,22 @@ public class UIManager : MonoBehaviour {
 		SetTilesButtons();
 	}
 
-	private void InitTiles()
+    void Update()
+    {
+
+    }
+
+    public void UpdateSummary()
+    {
+        summary.text = string.Empty;
+        GameObject[] maps = GameObject.FindGameObjectsWithTag("Map");
+        foreach(GameObject map in maps)
+        {
+            summary.text += map.GetComponent<MapScript>().Summary;
+        }
+    }
+
+    private void InitTiles()
 	{
 		sprites = new Sprite[8];
 		sprites[(int)sprite_types.wall] = Resources.Load<Sprite>("button_wall");
