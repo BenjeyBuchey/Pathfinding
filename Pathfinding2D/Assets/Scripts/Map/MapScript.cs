@@ -146,7 +146,7 @@ public class MapScript : MonoBehaviour {
 	{
 		if (tileType < 0) return;
 
-		if(GetTileType(go) != (int)TILE_TYPE.PATH_NEXT && GetTileType(go) != (int)TILE_TYPE.PATH_CURRENT)
+		if(GetTileType(go) != (int)TILE_TYPE.PATH_NEXT && GetTileType(go) != (int)TILE_TYPE.PATH_CURRENT && GetTileType(go) != (int)TILE_TYPE.PATH) // .PATH is new
 			go.GetComponent<TileScript>().SetOldTileType(GetTileType(go));
 
 		if (tileType == (int)TILE_TYPE.STARTPOINT)
@@ -316,8 +316,9 @@ public class MapScript : MonoBehaviour {
 		BreadthFirstSearch algo = new BreadthFirstSearch();
 		algo.StartAlgorithm(start, end);
         _algoSteps = algo.GetAlgoSteps();
+		_path = algo.GetPath();
 
-        Visualize(algo.GetPath(), algo.GetAlgoSteps());
+        Visualize();
 	}
 
 	public void StartAlgorithmDijkstra()
@@ -325,8 +326,9 @@ public class MapScript : MonoBehaviour {
 		Dijkstras algo = new Dijkstras();
 		algo.StartAlgorithm(start, end, this);
         _algoSteps = algo.GetAlgoSteps();
+		_path = algo.GetPath();
 
-        Visualize(algo.GetPath(), algo.GetAlgoSteps());
+		Visualize();
 	}
 
 	public void StartAlgorithmAStar()
@@ -334,8 +336,9 @@ public class MapScript : MonoBehaviour {
 		AStar algo = new AStar();
 		algo.StartAlgorithm(start, end, this);
         _algoSteps = algo.GetAlgoSteps();
+		_path = algo.GetPath();
 
-        Visualize(algo.GetPath(), algo.GetAlgoSteps());
+		Visualize();
 	}
 
 	public void StartAlgorithmGBFS()
@@ -343,34 +346,86 @@ public class MapScript : MonoBehaviour {
 		GreedyBestFirstSearch algo = new GreedyBestFirstSearch();
 		algo.StartAlgorithm(start, end, this);
         _algoSteps = algo.GetAlgoSteps();
+		_path = algo.GetPath();
 
-        Visualize(algo.GetPath(), algo.GetAlgoSteps());
+		Visualize();
 	}
 
-	private void Visualize(List<GameObject> path, List<AlgorithmStep> algoSteps)
+	private void Visualize()
 	{
 		isRunning = true;
 
 		if (uiManager.visualize.isOn)    // visualizeAlgorithms
-			VisualizeAlgorithms(algoSteps, path);
+			VisualizeAlgorithms();
 		else
-			DrawPath(path);
+			DrawPath();
 	}
 
-	private void VisualizeAlgorithms(List<AlgorithmStep> algoSteps, List<GameObject> path)
+	private void VisualizeAlgorithms()
 	{
-		StartCoroutine(DoVisualizeAlgorithms(algoSteps, path));
+		StartCoroutine(DoVisualizeAlgorithms());
 	}
 
-	IEnumerator DoVisualizeAlgorithms(List<AlgorithmStep> algoSteps, List<GameObject> path)
+	public void ResumeVisualization()
+	{
+		if (_algoSteps == null || _algoSteps.Count == 0) return;
+		if (!uiManager.visualize.isOn) return;
+
+		if (!isRunning)
+		{
+			isRunning = true;
+			if (_visualizationCounter < 0)
+				_visualizationCounter = 0;
+			StartCoroutine(DoVisualizeAlgorithms());
+		}
+	}
+
+	public void StepForward()
+	{
+		if (_isBusy || _algoSteps == null || _algoSteps.Count == 0) return;
+		if (!uiManager.visualize.isOn) return;
+
+		if (_visualizationCounter+1 < _algoSteps.Count)
+			StartCoroutine(DoStepForward());
+	}
+
+	public void StepBackwards()
+	{
+		if (_isBusy || _algoSteps == null || _algoSteps.Count == 0) return;
+		if (!uiManager.visualize.isOn) return;
+
+		if (_visualizationCounter < _algoSteps.Count && _visualizationCounter>=0)
+			StartCoroutine(DoStepBackwards());
+	}
+
+	public void StepEnd()
+	{
+		if (_isBusy || _algoSteps == null || _algoSteps.Count == 0) return;
+		if (!uiManager.visualize.isOn) return;
+
+		if (_visualizationCounter + 1 < _algoSteps.Count)
+			StartCoroutine(DoStepEnd());
+	}
+
+	public void StepBegin()
+	{
+		if (_isBusy || _algoSteps == null || _algoSteps.Count == 0) return;
+		if (!uiManager.visualize.isOn) return;
+
+		if (_visualizationCounter < _algoSteps.Count && _visualizationCounter >= 0)
+			StartCoroutine(DoStepBegin());
+	}
+
+	IEnumerator DoVisualizeAlgorithms()
 	{
         for(;_visualizationCounter < _algoSteps.Count; _visualizationCounter++)
 		//foreach (AlgorithmStep algoStep in algoSteps)
 		{
-            while (IsPaused() || _isBusy) // completely break here? when resume is pressed start this coroutine ??
-                yield return null;
+			// MOVE IT DOWN TO END OF FOR LOOP ? 
+            //while (IsPaused() || _isBusy) // completely break here? when resume is pressed start this coroutine ??
+            //    yield return null;
 
-            AlgorithmStep algoStep = algoSteps[_visualizationCounter];
+            AlgorithmStep algoStep = _algoSteps[_visualizationCounter];
             if (algoStep == null) continue;
             // set current tile
             if (algoStep.CurrentTile != start && algoStep.CurrentTile != end)
@@ -386,33 +441,171 @@ public class MapScript : MonoBehaviour {
 			}
 			// wait
 			yield return new WaitForSeconds(GetVisualizationDelay());
+
+			while (IsPaused() || _isBusy)
+				yield return null;
 		}
-        DrawPath(path);
+		_visualizationCounter--;
+
+		DrawPath();
         //yield break; // CAN USE THIS TO GO TO END
 	}
 
-    IEnumerator DoStepBackwards(List<AlgorithmStep> algoSteps, List<GameObject> path)
-    {
-        // need algoSteps as member variable. isBusy variable.
-        // set current tile to PATH_NEXT
-        // set neighbourtiles to old tile type!? and remove text
-
-        yield break;
-    }
-
-    private void DrawPath(List<GameObject> path)
+	IEnumerator DoStepForward()
 	{
-		if (path == null) return;
+		_isBusy = true;
+		// go to the next step
+		_visualizationCounter++;
 
-		_path = path; // ???
+		AlgorithmStep algoStep = _algoSteps[_visualizationCounter];
+		if (algoStep == null) yield break;	// draw path then break!?
 
-		foreach (GameObject tile in path)
+		// set current tile
+		if (algoStep.CurrentTile != start && algoStep.CurrentTile != end)
+			SetTileType(algoStep.CurrentTile, (int)TILE_TYPE.PATH_CURRENT);
+
+		foreach (GameObject next in algoStep.NeighbourTiles)
+		{
+			if (next != start && next != end)
+			{
+				SetTileType(next, (int)TILE_TYPE.PATH_NEXT);
+				TileHelper.SetTileText(next);
+			}
+		}
+		// wait
+		yield return new WaitForSeconds(GetVisualizationDelay());
+
+		// after last item draw path
+		if (_visualizationCounter == _algoSteps.Count - 1)
+			DrawPath();
+
+		_isBusy = false;
+	}
+
+	IEnumerator DoStepEnd()
+	{
+		_isBusy = true;
+		_visualizationCounter++;
+		for (; _visualizationCounter < _algoSteps.Count; _visualizationCounter++)
+		{
+			AlgorithmStep algoStep = _algoSteps[_visualizationCounter];
+			if (algoStep == null)
+			{
+				continue;
+			}
+			// set current tile
+			if (algoStep.CurrentTile != start && algoStep.CurrentTile != end)
+				SetTileType(algoStep.CurrentTile, (int)TILE_TYPE.PATH_CURRENT);
+
+			foreach (GameObject next in algoStep.NeighbourTiles)
+			{
+				if (next != start && next != end)
+				{
+					SetTileType(next, (int)TILE_TYPE.PATH_NEXT);
+					TileHelper.SetTileText(next);
+				}
+			}
+		}
+		DrawPath();
+		_visualizationCounter = _algoSteps.Count - 1;
+		_isBusy = false;
+		yield break;
+	}
+
+	IEnumerator DoStepBackwards()
+    {
+		// set current tile to PATH_NEXT, PATH NEXT to old tile type
+		// set neighbourtiles to old tile type!? and remove text
+		_isBusy = true;
+		
+		AlgorithmStep algoStep = _algoSteps[_visualizationCounter];
+		if (algoStep == null)
+		{
+			_isBusy = false;
+			yield break;
+		}
+
+		// if this is the last step we have to remove that path
+		if(_visualizationCounter == _algoSteps.Count-1)
+			RevertPath();
+
+		// need to set current tile from PATH_CURRENT to PATH_NEXT
+		if (algoStep.CurrentTile != start && algoStep.CurrentTile != end)
+			SetTileType(algoStep.CurrentTile, (int)TILE_TYPE.PATH_NEXT);
+
+		foreach (GameObject next in algoStep.NeighbourTiles)
+		{
+			if (next != start && next != end)
+			{
+				// need to set old tile type and remove tile text
+				SetTileType(next, next.GetComponent<TileScript>().GetOldTileType());
+				TileHelper.ClearTileText(next);
+			}
+		}
+		// wait
+		yield return new WaitForSeconds(GetVisualizationDelay());
+
+		_visualizationCounter--;
+		_isBusy = false;
+	}
+
+	IEnumerator DoStepBegin()
+	{
+		_isBusy = true;
+
+		for (; _visualizationCounter >= 0; _visualizationCounter--)
+		{
+			AlgorithmStep algoStep = _algoSteps[_visualizationCounter];
+			if (algoStep == null)
+			{
+				continue;
+			}
+
+			// if this is the last step we have to remove that path
+			if (_visualizationCounter == _algoSteps.Count - 1)
+				RevertPath();
+
+			// need to set current tile from PATH_CURRENT to PATH_NEXT
+			if (algoStep.CurrentTile != start && algoStep.CurrentTile != end)
+				SetTileType(algoStep.CurrentTile, (int)TILE_TYPE.PATH_NEXT);
+
+			foreach (GameObject next in algoStep.NeighbourTiles)
+			{
+				if (next != start && next != end)
+				{
+					// need to set old tile type and remove tile text
+					SetTileType(next, next.GetComponent<TileScript>().GetOldTileType());
+					TileHelper.ClearTileText(next);
+				}
+			}
+		}
+		_isBusy = false;
+		yield break;
+	}
+
+	private void DrawPath()
+	{
+		if (_path == null) return;
+
+		foreach (GameObject tile in _path)
 		{
 			if (TileHelper.GetTileType(tile) != (int)TILE_TYPE.ENDPOINT)
 				SetTileType(tile, (int)TILE_TYPE.PATH);
 		}
 
 		isRunning = false;
+	}
+
+	private void RevertPath()
+	{
+		// set path to path_current
+		if (_path == null) return;
+
+		foreach (GameObject tile in _path)
+		{
+			if (TileHelper.GetTileType(tile) != (int)TILE_TYPE.ENDPOINT)
+				SetTileType(tile, (int)TILE_TYPE.PATH_CURRENT);
+		}
 	}
 
 	public void ClearAlgorithm()
@@ -430,13 +623,12 @@ public class MapScript : MonoBehaviour {
 			{
 				for(int x = 0; x < tilesX; x++)
 				{
-
-				if (TileHelper.GetTileType(tiles[y, x]) == (int)TILE_TYPE.PATH
-				|| TileHelper.GetTileType(tiles[y, x]) == (int)TILE_TYPE.PATH_CURRENT || TileHelper.GetTileType(tiles[y, x]) == (int)TILE_TYPE.PATH_NEXT)
-				{
-					SetTileType(tiles[y, x], TileHelper.GetOldTileType(tiles[y, x]));
-					TileHelper.ClearTileText(tiles[y, x]);
-				}
+					if (TileHelper.GetTileType(tiles[y, x]) == (int)TILE_TYPE.PATH
+					|| TileHelper.GetTileType(tiles[y, x]) == (int)TILE_TYPE.PATH_CURRENT || TileHelper.GetTileType(tiles[y, x]) == (int)TILE_TYPE.PATH_NEXT)
+					{
+						SetTileType(tiles[y, x], TileHelper.GetOldTileType(tiles[y, x]));
+						TileHelper.ClearTile(tiles[y, x]);
+					}
 				}
 			}
 		_path.Clear();

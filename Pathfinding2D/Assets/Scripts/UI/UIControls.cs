@@ -54,49 +54,64 @@ public class UIControls : MonoBehaviour {
 
     private void Resume()
     {
-        //VisualScript visualScript = FindObjectOfType<VisualScript>();
-        //if (visualScript == null) return;
+		MapScript[] mapScripts = FindObjectsOfType<MapScript>();
+		foreach (MapScript map in mapScripts)
+		{
+			if (map == null) continue;
 
-        //visualScript.ResumeVisualization();
-    }
+			map.ResumeVisualization();
+		}
+	}
 
     public void Begin()
     {
-        //if (!isPaused) return;
+		if (!isPaused) return;
 
-        //VisualScript visualScript = FindObjectOfType<VisualScript>();
-        //if (visualScript == null) return;
+		MapScript[] mapScripts = FindObjectsOfType<MapScript>();
+		foreach (MapScript map in mapScripts)
+		{
+			if (map == null) continue;
 
-        //visualScript.StepBegin();
-    }
+			map.StepBegin();
+		}
+	}
 
     public void End()
     {
-        //if (!isPaused) return;
+		if (!isPaused) return;
 
-        //VisualScript visualScript = FindObjectOfType<VisualScript>();
-        //if (visualScript == null) return;
+		MapScript[] mapScripts = FindObjectsOfType<MapScript>();
+		foreach (MapScript map in mapScripts)
+		{
+			if (map == null) continue;
 
-        //visualScript.StepEnd();
-    }
+			map.StepEnd();
+		}
+	}
 
     public void Next()
     {
-        //if (!isPaused) return;
+        if (!isPaused) return;
 
-        //VisualScript visualScript = FindObjectOfType<VisualScript>();
-        //if (visualScript == null) return;
+		MapScript[] mapScripts = FindObjectsOfType<MapScript>();
+		foreach(MapScript map in mapScripts)
+		{
+			if (map == null) continue;
 
-        //visualScript.StepForward();
+			map.StepForward();
+		}
     }
 
     public void Previous()
     {
-        //if (!isPaused) return;
+		if (!isPaused) return;
 
-        //VisualScript visualScript = FindObjectOfType<VisualScript>();
-        //if (visualScript == null) return;
+		MapScript[] mapScripts = FindObjectsOfType<MapScript>();
+		foreach (MapScript map in mapScripts)
+		{
+			if (map == null) continue;
 
-        //visualScript.StepBackwards();
-    }
+			map.StepBackwards();
+		}
+	}
 }

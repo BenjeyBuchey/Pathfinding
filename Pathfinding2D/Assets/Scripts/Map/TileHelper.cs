@@ -53,9 +53,14 @@ public static class TileHelper
 		return go.GetComponent<TileScript>().Steps;
 	}
 
-	public static void ClearTileText(GameObject go)
+	public static void ClearTile(GameObject go)
 	{
 		go.GetComponent<TileScript>().Steps = 0;
+		go.GetComponentInChildren<Text>().text = string.Empty;
+	}
+
+	public static void ClearTileText(GameObject go)
+	{
 		go.GetComponentInChildren<Text>().text = string.Empty;
 	}
 }
