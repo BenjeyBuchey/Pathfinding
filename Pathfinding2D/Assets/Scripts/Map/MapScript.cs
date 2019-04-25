@@ -85,13 +85,14 @@ public class MapScript : MonoBehaviour {
 
 	private void CopyTile(GameObject tileToCopy, GameObject tile)
 	{
+        // TODO: if original map has path tiles then copying leads to ground tiles even if other types are below
 		int tileType = tileToCopy.GetComponent<TileScript>().GetTileType();
 		// whitelist tiles that shall be copied
 		if (tileType != (int)TILE_TYPE.STARTPOINT && tileType != (int)TILE_TYPE.ENDPOINT && tileType != (int)TILE_TYPE.GROUND && tileType != (int)TILE_TYPE.GRASS &&
 			tileType != (int)TILE_TYPE.WATER && tileType != (int)TILE_TYPE.WALL)
-			return;
+			tileType = tileToCopy.GetComponent<TileScript>().GetOldTileType();//return;
 
-		tile.GetComponent<TileScript>().SetTileType(tileType);
+        tile.GetComponent<TileScript>().SetTileType(tileType);
 		tile.GetComponent<Image>().sprite = sprites[tileType];
 
 		if (tileType == (int)TILE_TYPE.STARTPOINT)
@@ -314,7 +315,7 @@ public class MapScript : MonoBehaviour {
 	public void StartAlgorithmBFS()
 	{
 		BreadthFirstSearch algo = new BreadthFirstSearch();
-		algo.StartAlgorithm(start, end);
+		algo.StartAlgorithm(start, end, this);
         _algoSteps = algo.GetAlgoSteps();
 		_path = algo.GetPath();
 

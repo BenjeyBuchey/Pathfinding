@@ -48,7 +48,8 @@ public class GreedyBestFirstSearch : Algorithms {
 					//Debug.Log("Enqueue Tile: " + nextTile.GetHashCode() + " - priority: " + priority);
 					cameFrom.Add(nextTile, currentTile);
 					algoStep.NeighbourTiles.Add(nextTile); // WRONG! WE NEED TO LOOK AT THE TILE WITH LOWEST HEURISTIC FIRST ????????????
-					TileHelper.SetSteps(nextTile, TileHelper.GetSteps(currentTile) + 1);
+                    // we need to increase by actual cost of this tile; was +1 previously
+                    TileHelper.SetSteps(nextTile, TileHelper.GetSteps(currentTile) + map.GetCostByTileType(TileHelper.GetTileType(nextTile)));
 				}
 			}
 

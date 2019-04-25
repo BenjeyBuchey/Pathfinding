@@ -10,7 +10,7 @@ public class BreadthFirstSearch : Algorithms
 		name = "BreadthFirstSearch";
 	}
 
-	public override void StartAlgorithm(GameObject start, GameObject end, MapScript map = null)
+	public override void StartAlgorithm(GameObject start, GameObject end, MapScript map)
 	{
 		algoSteps.Clear();
 
@@ -41,7 +41,7 @@ public class BreadthFirstSearch : Algorithms
 					frontier.Enqueue(nextTile);
 					cameFrom.Add(nextTile, currentTile);
 					algoStep.NeighbourTiles.Add(nextTile);
-					TileHelper.SetSteps(nextTile,TileHelper.GetSteps(currentTile)+1);
+					TileHelper.SetSteps(nextTile,TileHelper.GetSteps(currentTile)+ map.GetCostByTileType(TileHelper.GetTileType(nextTile))); // we need to increase by actual cost of this tile; was +1 previously
 				}
 			}
 
