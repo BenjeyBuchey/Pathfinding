@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour {
 	public Slider visualizationDelay;
 	public Dropdown dropdownMap1, dropdownMap2, dropdownMap3, dropdownMap4;
 	private List<Dropdown> dropdowns;
+    public InputField summary;
 
 	private void Start()
 	{

@@ -593,6 +593,7 @@ public class MapScript : MonoBehaviour {
 			if (TileHelper.GetTileType(tile) != (int)TILE_TYPE.ENDPOINT)
 				SetTileType(tile, (int)TILE_TYPE.PATH);
 		}
+        AddSummary();
 
 		isRunning = false;
 	}
@@ -608,6 +609,20 @@ public class MapScript : MonoBehaviour {
 				SetTileType(tile, (int)TILE_TYPE.PATH_CURRENT);
 		}
 	}
+
+    private void AddSummary()
+    {
+        if (uiManager == null) return;
+
+        uiManager.GetComponent<UIManager>().summary.text += selectedAlgorithm + ": " + _path[_path.Count - 1].GetComponent<TileScript>().Steps + System.Environment.NewLine;
+    }
+
+    private void ClearSummary()
+    {
+        if (uiManager == null) return;
+
+        uiManager.GetComponent<UIManager>().summary.text = String.Empty;
+    }
 
 	public void ClearAlgorithm()
 	{
@@ -635,6 +650,7 @@ public class MapScript : MonoBehaviour {
 		_path.Clear();
         _algoSteps.Clear();
         _visualizationCounter = 0;
+        ClearSummary();
 	}
 
 	private float GetCostGround()
