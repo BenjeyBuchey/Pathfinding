@@ -6098,7 +6098,7 @@ GameObject:
   - component: {fileID: 1486269279}
   - component: {fileID: 1486269278}
   m_Layer: 5
-  m_Name: TextOptions
+  m_Name: TextSummary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
