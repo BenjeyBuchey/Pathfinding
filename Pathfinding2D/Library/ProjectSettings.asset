@@ -617,7 +617,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 0d863d2f-818e-4b11-8726-4105028d4300
   projectName: Pathfinding2D
   organizationId: benjey-buchey

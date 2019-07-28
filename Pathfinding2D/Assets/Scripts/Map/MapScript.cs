@@ -434,12 +434,7 @@ public class MapScript : MonoBehaviour {
 	IEnumerator DoVisualizeAlgorithms()
 	{
         for(;_visualizationCounter < _algoSteps.Count; _visualizationCounter++)
-		//foreach (AlgorithmStep algoStep in algoSteps)
 		{
-			// MOVE IT DOWN TO END OF FOR LOOP ? 
-            //while (IsPaused() || _isBusy) // completely break here? when resume is pressed start this coroutine ??
-            //    yield return null;
-
             AlgorithmStep algoStep = _algoSteps[_visualizationCounter];
             if (algoStep == null) continue;
             // set current tile
@@ -454,16 +449,13 @@ public class MapScript : MonoBehaviour {
 					TileHelper.SetTileText(next);
 				}
 			}
-			// wait
 			yield return new WaitForSeconds(GetVisualizationDelay());
 
 			while (IsPaused() || _isBusy)
 				yield return null;
 		}
 		_visualizationCounter--;
-
 		DrawPath();
-        //yield break; // CAN USE THIS TO GO TO END
 	}
 
 	IEnumerator DoStepForward()
@@ -692,7 +684,7 @@ public class MapScript : MonoBehaviour {
 
 	private float GetVisualizationDelay()
 	{
-		return uiManager.visualizationDelay.value;
+		return Math.Abs(uiManager.visualizationDelay.value);
 	}
 
 	public GameObject[,] GetTiles()

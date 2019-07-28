@@ -56,7 +56,6 @@ public abstract class Algorithms {
 
 	protected float ComputeVectorCrossProduct(GameObject start, GameObject goal, GameObject current)
 	{
-		//MapScript tgm = GameObject.Find("Map").GetComponent<MapScript>();
 		UIManager ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 		if (ui == null || !ui.vectorCrossProduct.isOn) return 0.0f;
 

@@ -113,9 +113,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 1931797161950772, guid: 9f6488178d8a121439943940b0ad6d4a, type: 2}
-  tilesX: 25
-  tilesY: 25
+  tilesX: 15
+  tilesY: 15
   draggedTileType: -1
+  _visualizationCounter: 0
   sprites:
   - {fileID: 21300000, guid: 0727c957273e446489033f82a2371e89, type: 3}
   - {fileID: 21300002, guid: 0727c957273e446489033f82a2371e89, type: 3}
